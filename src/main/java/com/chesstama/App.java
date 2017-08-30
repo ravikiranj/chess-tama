@@ -1,5 +1,7 @@
 package com.chesstama;
 
+import com.chesstama.model.Game;
+
 /**
  * App
  *
@@ -10,6 +12,7 @@ public class App
 {
     public static void main(String[] args)
     {
-        System.out.println("Hello world!");
+        Game g = new Game();
+        g.printState();
     }
 }
