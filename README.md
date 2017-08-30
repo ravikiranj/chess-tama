@@ -1,2 +1,2 @@
 # chess-tama
-Mashup of Chess and Onitama
+* Mashup of Chess and Onitama
