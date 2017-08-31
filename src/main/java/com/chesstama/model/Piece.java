@@ -1,5 +1,8 @@
 package com.chesstama.model;
 
+import java.util.Objects;
+import java.util.StringJoiner;
+
 /**
  * Piece
  *
@@ -12,11 +15,11 @@ public abstract class Piece
     protected Position position;
     protected Player player;
 
-    public Piece(PieceType pieceType, Position position, Player player)
+    public Piece(PieceType pieceType, Player player, Position position)
     {
         this.pieceType = pieceType;
-        this.position = position;
         this.player = player;
+        this.position = position;
     }
 
     public boolean isMaster()
@@ -47,7 +50,37 @@ public abstract class Piece
     @Override
     public String toString()
     {
-        return shortName();
+        return new StringJoiner(", ", this.getClass().getSimpleName() + "[", "]")
+                .add("pieceType = " + pieceType)
+                .add("player = " + player)
+                .add("position = " + position)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        Piece that = (Piece) o;
+
+        return Objects.equals(this.pieceType, that.pieceType) &&
+               Objects.equals(this.player, that.player) &&
+               Objects.equals(this.position, that.position);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(pieceType, player, position);
     }
 
     enum PieceType

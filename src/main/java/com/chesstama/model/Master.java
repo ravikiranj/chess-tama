@@ -8,13 +8,13 @@ package com.chesstama.model;
  */
 public class Master extends Piece
 {
-    public Master(Position position, Player player)
+    public Master(Player player, Position position)
     {
-        this(PieceType.MASTER, position, player);
+        this(PieceType.MASTER, player, position);
     }
 
-    public Master(PieceType pieceType, Position position, Player player)
+    public Master(PieceType pieceType, Player player, Position position)
     {
-        super(pieceType, position, player);
+        super(pieceType, player, position);
     }
 }
