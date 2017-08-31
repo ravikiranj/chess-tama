@@ -10,5 +10,14 @@ import java.util.List;
  */
 public class Player
 {
-    List<Piece> pieces;
+    private List<Piece> pieces;
+    private List<Card> cards;
+    private Card upcomingCard;
+
+    public Player(List<Piece> pieces, List<Card> cards, Card upcomingCard)
+    {
+        this.pieces = pieces;
+        this.cards = cards;
+        this.upcomingCard = upcomingCard;
+    }
 }

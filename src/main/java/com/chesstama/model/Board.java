@@ -8,8 +8,8 @@ package com.chesstama.model;
  */
 public class Board
 {
-    private static final int MAX_ROWS = 5;
-    private static final int MAX_COLS = 5;
+    public static final int MAX_ROWS = 5;
+    public static final int MAX_COLS = 5;
 
     private Slot[][] board;
     private Player p1;
