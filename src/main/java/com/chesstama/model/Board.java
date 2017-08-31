@@ -9,7 +9,6 @@ package com.chesstama.model;
 public class Board
 {
     public static final int MIN_ROWS = 1;
-    public static final int MIN_COLS = 1;
     public static final int MAX_ROWS = 5;
     public static final int MAX_COLS = 5;
     public static final int MASTER_COL = 3;

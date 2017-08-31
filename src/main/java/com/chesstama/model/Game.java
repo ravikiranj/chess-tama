@@ -21,14 +21,52 @@ public class Game
     public Game()
     {
         List<Card> cardsForGame = GameUtil.getRandomSubList(Card.ALL_CARDS, NUM_GAME_CARDS);
-        Player p1 = new Player(cardsForGame.subList(0, 2), cardsForGame.get(2), Player.PlayerType.P1);
-        Player p2 = new Player(cardsForGame.subList(3, 5), null, Player.PlayerType.P2);
 
-        board = new Board(p1, p2);
+        this.p1 = new Player(cardsForGame.subList(0, 2), cardsForGame.get(2), Player.PlayerType.P1);
+        this.p2 = new Player(cardsForGame.subList(3, 5), null, Player.PlayerType.P2);
+        this.board = new Board(p1, p2);
     }
 
     public void printState()
     {
+        System.out.println("==============");
+        System.out.println("P2");
+        System.out.println("==============");
+
+        printPlayerCards(p2, Player.PlayerType.P2);
+
+        System.out.println("==============");
+        System.out.println("Board");
+        System.out.println("==============");
         board.printBoard();
+
+
+        System.out.println("==============");
+        printPlayerCards(p1, Player.PlayerType.P1);
+        System.out.println("==============");
+        System.out.println("P1");
+        System.out.println("==============");
+    }
+
+    private void printPlayerCards(Player p, Player.PlayerType playerType)
+    {
+        System.out.println(playerType + " Cards");
+        System.out.println("==============");
+        for (Card c : p.getCards())
+        {
+            c.printCard();
+        }
+
+        System.out.println(playerType + " Upcoming Card");
+        System.out.println("==============");
+        if (p.getUpcomingCard() != null)
+        {
+            p.getUpcomingCard().printCard();
+        }
+        else
+        {
+            System.out.println("EMPTY UPCOMING CARD");
+        }
+        System.out.println("==============");
     }
 }
