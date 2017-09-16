@@ -13,6 +13,16 @@ dependencies {
     compile group: 'org.testng', name: 'testng', version: '6.11'
 }
 
+sourceSets.main {
+    java {
+        srcDir "src/main/java"
+    }
+    resources {
+        srcDirs = ["src/main/java", "src/main/resources"]
+        exclude "**/*.java"
+    }
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '4.1'
 }
@@ -20,7 +30,7 @@ task wrapper(type: Wrapper) {
 task app(type: JavaExec, dependsOn: 'compileJava') {
     classpath = sourceSets.main.runtimeClasspath
 
-    main = 'com.chesstama.App'
+    main = 'com.chesstama.GameController'
     if (project.hasProperty("appArgs")) {
         args Eval.me(appArgs)
     }
