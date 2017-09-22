@@ -116,7 +116,9 @@ public enum Card
     public void printCard()
     {
         Set<Position> locations = getBoardLocations();
-
+        System.out.println("==============");
+        System.out.println(this);
+        System.out.println("==============");
         for (int i = Board.MAX_ROWS; i >= 1; i--)
         {
             for (int j = 1; j <= Board.MAX_COLS; j++)

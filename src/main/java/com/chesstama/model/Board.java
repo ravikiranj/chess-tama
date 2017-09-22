@@ -8,8 +8,10 @@ package com.chesstama.model;
  */
 public class Board
 {
+    public static final int MIN_ROWS = 1;
     public static final int MAX_ROWS = 5;
     public static final int MAX_COLS = 5;
+    public static final int MASTER_COL = 3;
 
     private Slot[][] board;
     private Player p1;
@@ -33,16 +35,26 @@ public class Board
             for (int j = 1; j <= MAX_COLS; j++)
             {
                 board[i][j] = new Slot();
-                // Player 1
-                // Player 2
-                // everything else
             }
+        }
+
+        // Position p1 and p2 pieces
+        placePlayerPieces(p1);
+        placePlayerPieces(p2);
+    }
+
+    private void placePlayerPieces(Player p)
+    {
+        for (Piece piece : p.getPieces())
+        {
+            Position pos = piece.getPosition();
+            board[pos.getRow()][pos.getCol()].setPiece(piece);
         }
     }
 
     public void printBoard()
     {
-        for (int i = 1; i <= MAX_ROWS; i++)
+        for (int i = MAX_ROWS; i >= MIN_ROWS; i--)
         {
             for (int j = 1; j <= MAX_COLS; j++)
             {
