@@ -1,6 +1,6 @@
 package com.chesstama;
 
-import com.chesstama.view.BoardView;
+import com.chesstama.view.GameView;
 import javafx.application.Application;
 
 /**
@@ -13,6 +13,6 @@ public class GameController
 {
     public static void main(String[] args)
     {
-        Application.launch(BoardView.class, args);
+        Application.launch(GameView.class, args);
     }
 }

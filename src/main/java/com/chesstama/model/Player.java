@@ -76,7 +76,7 @@ public class Player
         return playerType;
     }
 
-    enum PlayerType
+    public enum PlayerType
     {
         P1,
         P2;

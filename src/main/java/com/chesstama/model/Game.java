@@ -69,4 +69,19 @@ public class Game
         }
         System.out.println("==============");
     }
+
+    public Board getBoard()
+    {
+        return board;
+    }
+
+    public Player getP1()
+    {
+        return p1;
+    }
+
+    public Player getP2()
+    {
+        return p2;
+    }
 }
