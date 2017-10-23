@@ -52,6 +52,16 @@ public class Board
         }
     }
 
+    public Slot getSlot(int row, int col)
+    {
+        if (row < 1 || row > MAX_ROWS || col < 1 || col > MAX_COLS)
+        {
+            throw new IllegalArgumentException("row/col out of bounds, row = " + row + ", col = " + col);
+
+        }
+        return board[row][col];
+    }
+
     public void printBoard()
     {
         for (int i = MAX_ROWS; i >= MIN_ROWS; i--)

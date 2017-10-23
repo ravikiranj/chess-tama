@@ -52,7 +52,7 @@ public class GameView extends Application
     {
         // Init canvas
         canvas = new Pane();
-        canvas.setPrefSize(800, 600);
+        canvas.setPrefSize(1200, 800);
 
         // Outer HBox containing main game and move window
         outerHBox = new HBox();
@@ -115,7 +115,7 @@ public class GameView extends Application
         player2NextCard = new PlayerCardView(p2, p2.getUpcomingCard());
         GridPane.setConstraints(player2NextCard.getPlayerCardButton(), 0, 0);
 
-        boardView = new BoardView();
+        boardView = new BoardView(game);
         GridPane boardGridPane = boardView.getBoardGridPane();
         GridPane.setConstraints(boardGridPane, 1, 0, 2, 1);
 

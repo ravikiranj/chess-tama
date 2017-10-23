@@ -1,6 +1,8 @@
 package com.chesstama.view;
 
-import javafx.scene.control.Button;
+import com.chesstama.model.Board;
+import com.chesstama.model.Game;
+import com.chesstama.model.Slot;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -12,18 +14,22 @@ import javafx.scene.layout.GridPane;
 public class BoardView
 {
     private GridPane boardGridPane;
-    private Button[][] board;
+    private BoardSlotView[][] boardSlotView;
 
-    public BoardView()
+    public BoardView(Game game)
     {
+        boardSlotView = new BoardSlotView[Board.MAX_ROWS+1][Board.MAX_COLS+1];
+        Board board = game.getBoard();
+
         boardGridPane = new GridPane();
-        for (int i = 1; i <= 5; i++)
+        for (int row = 1; row <= Board.MAX_ROWS; row++)
         {
-            for (int j = 1; j <= 5; j++)
+            for (int col = 1; col <= Board.MAX_COLS; col++)
             {
-                Button piece = new Button(i + "," + j);
-                GridPane.setConstraints(piece, j-1, i-1);
-                boardGridPane.getChildren().add(piece);
+                Slot slot = board.getSlot(row, col);
+                BoardSlotView boardSlotView = new BoardSlotView(row, col, slot);
+                GridPane.setConstraints(boardSlotView, col-1, row -1);
+                boardGridPane.getChildren().add(boardSlotView);
             }
         }
 
@@ -35,8 +41,8 @@ public class BoardView
         return boardGridPane;
     }
 
-    public Button[][] getBoard()
+    public BoardSlotView[][] getBoardSlotView()
     {
-        return board;
+        return boardSlotView;
     }
 }

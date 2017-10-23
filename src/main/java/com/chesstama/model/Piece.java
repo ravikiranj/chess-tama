@@ -47,6 +47,11 @@ public abstract class Piece
         return this.position;
     }
 
+    public String getShortName()
+    {
+        return player.getPlayerType().name() + " - " + pieceType.getShortName();
+    }
+
     @Override
     public String toString()
     {
