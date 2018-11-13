@@ -10,10 +10,12 @@ import javafx.scene.layout.StackPane;
  */
 public class PlayerCardView extends StackPane {
 
-    private Player currentPlayer;
-    private Card card;
+    private final Player currentPlayer;
+    private final Card card;
 
-    public PlayerCardView(Player player, Card card) {
+    public PlayerCardView(final Player player, final Card card) {
+        super();
+
         this.currentPlayer = player;
         this.card = card;
 
@@ -34,15 +36,7 @@ public class PlayerCardView extends StackPane {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-
     public Card getCard() {
         return card;
-    }
-
-    public void setCard(Card card) {
-        this.card = card;
     }
 }

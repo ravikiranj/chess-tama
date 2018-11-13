@@ -8,11 +8,11 @@ package com.chesstama.model;
  */
 public class Student extends Piece {
 
-    public Student(Player player, Position position) {
+    public Student(final Player player, final Position position) {
         this(PieceType.STUDENT, player, position);
     }
 
-    public Student(PieceType pieceType, Player player, Position position) {
+    public Student(final PieceType pieceType, final Player player, final Position position) {
         super(pieceType, player, position);
     }
 }

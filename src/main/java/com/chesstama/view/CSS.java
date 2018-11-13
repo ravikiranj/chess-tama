@@ -2,11 +2,12 @@ package com.chesstama.view;
 
 public enum CSS {
     GAMEROW("gamerow"),
-    SQUARE("square");
+    SQUARE("square"),
+    HIGHLIGHTED("highlighted");
 
     private final String cssClassName;
 
-    CSS(String cssClassName) {
+    CSS(final String cssClassName) {
         this.cssClassName = cssClassName;
     }
 

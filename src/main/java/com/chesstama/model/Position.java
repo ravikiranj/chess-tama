@@ -11,10 +11,10 @@ import java.util.StringJoiner;
  */
 public class Position {
 
-    private int row;
-    private int col;
+    private final int row;
+    private final int col;
 
-    public Position(int row, int col) {
+    public Position(final int row, final int col) {
         this.row = row;
         this.col = col;
     }
@@ -25,7 +25,7 @@ public class Position {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -52,15 +52,8 @@ public class Position {
         return row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getCol() {
         return col;
     }
 
-    public void setCol(int col) {
-        this.col = col;
-    }
 }

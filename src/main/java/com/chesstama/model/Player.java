@@ -20,7 +20,7 @@ public class Player {
     private final Card upcomingCard;
     private final PlayerType playerType;
 
-    public Player(List<Card> cards, Card upcomingCard, PlayerType playerType) {
+    public Player(final List<Card> cards, final Card upcomingCard, final PlayerType playerType) {
         this.pieces = new ArrayList<>();
         this.removedPieces = new ArrayList<>();
         this.cards = cards;
@@ -30,14 +30,15 @@ public class Player {
         initPieces();
     }
 
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void initPieces() {
         int row = playerType == P1 ? Board.MIN_ROWS : Board.MAX_ROWS;
         // Add master
         this.pieces.add(new Master(this, new Position(row, MASTER_COL)));
 
         // Add students
-        for (int j = 1; j <= 5; j++) {
-            if (j == 3) {
+        for (int j = Board.MIN_COLS; j <= Board.MAX_COLS; j++) {
+            if (j == MASTER_COL) {
                 continue;
             }
 
@@ -53,7 +54,7 @@ public class Player {
         return removedPieces;
     }
 
-    public void removePiece(Piece p) {
+    public void removePiece(final Piece p) {
         boolean status = this.pieces.remove(p);
         if (!status) {
             throw new IllegalStateException("Unable to find piece " + p);
@@ -75,6 +76,6 @@ public class Player {
 
     public enum PlayerType {
         P1,
-        P2;
+        P2
     }
 }

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  */
 public class GameUtil {
 
-    public static <T> List<T> getRandomSubList(List<T> input, int subsetSize) {
+    public static <T> List<T> getRandomSubList(final List<T> input, final int subsetSize) {
         Random r = new Random();
 
         // Copy list and operate on that

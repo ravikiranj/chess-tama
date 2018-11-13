@@ -1,5 +1,7 @@
 package com.chesstama.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Optional;
 
 /**
@@ -10,9 +12,13 @@ import java.util.Optional;
  */
 public class Slot {
 
+    private final int row;
+    private final int col;
     private Optional<Piece> piece;
 
-    public Slot() {
+    public Slot(final int row, final int col) {
+        this.row = row;
+        this.col = col;
         this.piece = Optional.empty();
     }
 
@@ -20,21 +26,31 @@ public class Slot {
         return piece;
     }
 
-    public void setPiece(Piece piece) {
+    public void setPiece(final Piece piece) {
         this.piece = Optional.of(piece);
     }
 
     @Override
     public String toString() {
-        if (!piece.isPresent()) {
-            return "EMPTY";
-        }
-        Piece p = piece.get();
+        String pieceName = piece.map(Piece::getShortName)
+                                .orElse("");
+
         StringBuilder sb = new StringBuilder();
-        sb.append(p.player.getPlayerType());
-        sb.append("-");
-        sb.append(p.pieceType.getShortName());
+        sb.append('(').append(row).append(", ").append(col).append(')');
+
+        if (StringUtils.isNotEmpty(pieceName)) {
+            sb.append(" - ");
+            sb.append(pieceName);
+        }
 
         return sb.toString();
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 }

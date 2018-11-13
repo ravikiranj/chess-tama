@@ -9,13 +9,13 @@ import java.util.StringJoiner;
  * @author rjanardhana
  * @since Aug 2017
  */
-public abstract class Piece {
+public class Piece {
 
-    protected PieceType pieceType;
-    protected Position position;
-    protected Player player;
+    protected final PieceType pieceType;
+    protected final Position position;
+    protected final Player player;
 
-    public Piece(PieceType pieceType, Player player, Position position) {
+    public Piece(final PieceType pieceType, final Player player, final Position position) {
         this.pieceType = pieceType;
         this.player = player;
         this.position = position;
@@ -51,7 +51,7 @@ public abstract class Piece {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
@@ -83,7 +83,7 @@ public abstract class Piece {
         private final String name;
         private final String shortName;
 
-        PieceType(String name, String shortName) {
+        PieceType(final String name, final String shortName) {
             this.name = name;
             this.shortName = shortName;
         }

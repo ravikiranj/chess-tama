@@ -3,7 +3,6 @@ package com.chesstama.model;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -106,41 +105,9 @@ public enum Card {
     private final CardColor cardColor;
     private final Set<Move> moves;
 
-    Card(CardColor cardColor, Set<Move> moves) {
+    Card(final CardColor cardColor, final Set<Move> moves) {
         this.cardColor = cardColor;
         this.moves = moves;
-    }
-
-    public void printCard() {
-        Set<Position> locations = getBoardLocations();
-        System.out.println("==============");
-        System.out.println(this);
-        System.out.println("==============");
-        for (int i = Board.MAX_ROWS; i >= 1; i--) {
-            for (int j = 1; j <= Board.MAX_COLS; j++) {
-                Position p = new Position(i, j);
-                if (i == 3 && j == 3) {
-                    System.out.print("C");
-                } else if (locations.contains(p)) {
-                    System.out.print("M");
-                } else {
-                    System.out.print(".");
-                }
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
-    }
-
-    public Set<Position> getBoardLocations() {
-        Position p = new Position(3, 3);
-        Set<Position> result = new HashSet<>();
-
-        for (Move m : this.moves) {
-            result.add(new Position(p.getRow() + m.getRow(), p.getCol() + m.getCol()));
-        }
-
-        return result;
     }
 
     enum CardColor {

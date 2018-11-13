@@ -1,9 +1,12 @@
 package com.chesstama.view;
 
-import com.chesstama.model.Piece;
 import com.chesstama.model.Slot;
+import com.chesstama.util.JavaFXUtil;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * BoardSlotView
@@ -13,29 +16,56 @@ import javafx.scene.layout.StackPane;
  */
 public class BoardSlotView extends StackPane {
 
-    private int row;
-    private int col;
-    private Slot slot;
+    private final Slot slot;
+    private final Label slotLabel;
+    private boolean isHighlighted;
 
-    public BoardSlotView(int row, int col, Slot slot) {
-        this.row = row;
-        this.col = col;
+    public BoardSlotView(final Slot slot) {
+        super();
+
         this.slot = slot;
+        this.slotLabel = new Label(slot.toString());
+        this.isHighlighted = false;
 
-        String labelString = "(" + row + ", " + col + ") - " + slot.getPiece().map(Piece::getShortName).orElse("EMP");
-        getChildren().addAll(new Label(labelString));
+        getChildren().addAll(slotLabel);
         getStyleClass().add(CSS.SQUARE.getName());
+
+        setEventHandlers();
     }
 
-    public int getRow() {
-        return row;
+    public void toggleHighlighted() {
+        if (isHighlighted) {
+            isHighlighted = false;
+        } else {
+            isHighlighted = true;
+        }
     }
 
-    public int getCol() {
-        return col;
+    private void setEventHandlers() {
+        this.setOnMouseClicked(new BoardSlotViewClickHandler(this));
     }
 
-    public Slot getSlot() {
-        return slot;
+    @Slf4j
+    private static class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
+        private final BoardSlotView boardSlotView;
+
+        public BoardSlotViewClickHandler(final BoardSlotView boardSlotView) {
+            this.boardSlotView = boardSlotView;
+        }
+
+        @Override
+        public void handle(final MouseEvent event) {
+            this.boardSlotView.toggleHighlighted();
+            JavaFXUtil.toggleCSSClass(this.boardSlotView, CSS.HIGHLIGHTED.getName());
+            log.info("BoardSlotView clicked = {}", this.boardSlotView);
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Slot = %s", this.slot.toString()));
+        sb.append(String.format(", isHighlighted = %s", this.isHighlighted));
+        return sb.toString();
     }
 }

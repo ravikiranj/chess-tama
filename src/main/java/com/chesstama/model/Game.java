@@ -40,8 +40,4 @@ public class Game {
     public Player getP2() {
         return board.getPlayer2();
     }
-
-    public void printBoardState() {
-        this.board.printBoardState();
-    }
 }

@@ -13,18 +13,22 @@ import javafx.scene.layout.GridPane;
  */
 public class BoardView {
 
-    private GridPane boardGridPane;
-    private BoardSlotView[][] boardSlotView;
+    private final GridPane boardGridPane;
 
-    public BoardView(Game game) {
-        boardSlotView = new BoardSlotView[Board.MAX_ROWS + 1][Board.MAX_COLS + 1];
+    @SuppressWarnings("PMD.UnusedPrivateField")
+    private final BoardSlotView[][] boardSlotViews;
+
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    public BoardView(final Game game) {
+        boardSlotViews = new BoardSlotView[Board.MAX_ROWS + 1][Board.MAX_COLS + 1];
         Board board = game.getBoard();
 
         boardGridPane = new GridPane();
         for (int row = 1; row <= Board.MAX_ROWS; row++) {
             for (int col = 1; col <= Board.MAX_COLS; col++) {
                 Slot slot = board.getSlot(row, col);
-                BoardSlotView boardSlotView = new BoardSlotView(row, col, slot);
+                BoardSlotView boardSlotView = new BoardSlotView(slot);
+                boardSlotViews[row][col] = boardSlotView;
                 GridPane.setConstraints(boardSlotView, col - 1, row - 1);
                 boardGridPane.getChildren().add(boardSlotView);
             }
@@ -35,9 +39,5 @@ public class BoardView {
 
     public GridPane getBoardGridPane() {
         return boardGridPane;
-    }
-
-    public BoardSlotView[][] getBoardSlotView() {
-        return boardSlotView;
     }
 }

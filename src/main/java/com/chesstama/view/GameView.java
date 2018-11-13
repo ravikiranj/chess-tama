@@ -5,11 +5,9 @@ import com.chesstama.model.Player;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -21,6 +19,9 @@ import javafx.stage.Stage;
  * @since Sep 2017
  */
 public class GameView extends Application {
+
+    private static final String CHESS_TAMA = "Chess-Tama";
+    private static final String STYLES_CSS = "styles.css";
 
     private final Game game;
 
@@ -38,12 +39,13 @@ public class GameView extends Application {
     private Pane canvas;
     private HBox outerHBox;
     private VBox mainGameVBox;
-    private ScrollPane movePane;
     private GridPane topRowGridPane;
     private GridPane middleRowGridPane;
     private GridPane bottomRowGridPane;
 
     public GameView() {
+        super();
+
         game = new Game();
     }
 
@@ -57,7 +59,6 @@ public class GameView extends Application {
         canvas.getChildren().add(outerHBox);
 
         initMainGameVBox();
-        //initMovesWindow();
     }
 
     private void initMainGameVBox() {
@@ -70,21 +71,11 @@ public class GameView extends Application {
         initBottomRowGridPane();
     }
 
-    private void initMovesWindow() {
-        // Moves window
-        movePane = new ScrollPane();
-        movePane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        outerHBox.getChildren().add(movePane);
-    }
-
     private void initBottomRowGridPane() {
         // Bottom row containing Player 1 cards
         bottomRowGridPane = new GridPane();
         bottomRowGridPane.getStyleClass().add(CSS.GAMEROW.getName());
         mainGameVBox.getChildren().add(bottomRowGridPane);
-
-        StackPane emptyLabelStackPane1 = new EmptyStackPane();
-        GridPane.setConstraints(emptyLabelStackPane1, 0, 0);
 
         // Player 1 cards
         Player p1 = game.getP1();
@@ -94,11 +85,8 @@ public class GameView extends Application {
         player1Card2 = new PlayerCardView(p1, p1.getCards().get(1));
         GridPane.setConstraints(player1Card2, 2, 0);
 
-        StackPane emptyLabelStackPane2 = new EmptyStackPane();
-        GridPane.setConstraints(emptyLabelStackPane2, 3, 0);
-
         bottomRowGridPane.getChildren()
-                         .addAll(emptyLabelStackPane1, player1Card1, player1Card2, emptyLabelStackPane2);
+                         .addAll(player1Card1, player1Card2);
     }
 
     private void initMiddleRowGridPane() {
@@ -129,9 +117,6 @@ public class GameView extends Application {
         topRowGridPane.getStyleClass().add(CSS.GAMEROW.getName());
         mainGameVBox.getChildren().add(topRowGridPane);
 
-        StackPane emptyLabelStackPane1 = new EmptyStackPane();
-        GridPane.setConstraints(emptyLabelStackPane1, 0, 0);
-
         // Player 2 cards
         Player p2 = game.getP2();
         player2Card1 = new PlayerCardView(p2, p2.getCards().get(0));
@@ -140,15 +125,12 @@ public class GameView extends Application {
         player2Card2 = new PlayerCardView(p2, p2.getCards().get(1));
         GridPane.setConstraints(player2Card2, 2, 0);
 
-        StackPane emptyLabelStackPane2 = new EmptyStackPane();
-        GridPane.setConstraints(emptyLabelStackPane2, 3, 0);
-
         topRowGridPane.getChildren()
-                      .addAll(emptyLabelStackPane1, player2Card1, player2Card2, emptyLabelStackPane2);
+                      .addAll(player2Card1, player2Card2);
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(final Stage stage) throws Exception {
         initCanvas();
 
         Scene scene = new Scene(canvas);
@@ -157,9 +139,9 @@ public class GameView extends Application {
         stage.setWidth(primaryScreenBounds.getWidth() * 0.75);
         stage.setHeight(primaryScreenBounds.getHeight() * 0.75);
 
-        stage.setTitle("Chess-Tama");
+        stage.setTitle(CHESS_TAMA);
         stage.setScene(scene);
-        scene.getStylesheets().add("styles.css");
+        scene.getStylesheets().add(STYLES_CSS);
         stage.sizeToScene();
         stage.show();
     }
