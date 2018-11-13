@@ -1,0 +1,11 @@
+.square {
+  -fx-border-style: solid;
+  -fx-padding: 10px;
+}
+
+.gamerow {
+  -fx-alignment: center;
+  -fx-padding: 10px;
+  -fx-border-insets: 10px;
+  -fx-background-insets: 10px;
+}

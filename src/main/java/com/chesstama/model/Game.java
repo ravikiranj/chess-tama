@@ -19,13 +19,14 @@ public class Game {
     private final Board board;
 
     public Game() {
-        log.info("Initalized Game");
+        log.info("Initalizing Game");
         List<Card> cardsForGame = GameUtil.getRandomSubList(Card.ALL_CARDS, NUM_GAME_CARDS);
 
         Player p1 = new Player(cardsForGame.subList(0, 2), cardsForGame.get(2), Player.PlayerType.P1);
         Player p2 = new Player(cardsForGame.subList(3, 5), null, Player.PlayerType.P2);
 
         this.board = new Board(p1, p2);
+        log.info("Initalizing Game Complete");
     }
 
     public Board getBoard() {

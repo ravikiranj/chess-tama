@@ -2,21 +2,23 @@ package com.chesstama.view;
 
 import com.chesstama.model.Card;
 import com.chesstama.model.Player;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 
 /**
  * PlayerCardView
  */
-public class PlayerCardView {
+public class PlayerCardView extends StackPane {
 
-    private Button playerCardButton;
     private Player currentPlayer;
     private Card card;
 
     public PlayerCardView(Player player, Card card) {
         this.currentPlayer = player;
         this.card = card;
-        this.playerCardButton = new Button(getPlayerCardText());
+
+        getChildren().addAll(new Label(getPlayerCardText()));
+        getStyleClass().add("square");
     }
 
     private String getPlayerCardText() {
@@ -26,14 +28,6 @@ public class PlayerCardView {
             .append(", type = ")
             .append(card != null ? card.name() : "NULL")
             .toString();
-    }
-
-    public Button getPlayerCardButton() {
-        return playerCardButton;
-    }
-
-    public void setPlayerCardButton(Button playerCardButton) {
-        this.playerCardButton = playerCardButton;
     }
 
     public Player getCurrentPlayer() {
