@@ -10,30 +10,28 @@ import javafx.scene.control.Button;
  * @author rjanardhana
  * @since Oct 2017
  */
-public class BoardSlotView extends Button
-{
+public class BoardSlotView extends Button {
+
     private int row;
     private int col;
     private Slot slot;
 
-    public BoardSlotView(int row, int col, Slot slot)
-    {
+    public BoardSlotView(int row, int col, Slot slot) {
         super("(" + row + ", " + col + ") - " + slot.getPiece().map(Piece::getShortName).orElse("EMP"));
+        this.row = row;
+        this.col = col;
         this.slot = slot;
     }
 
-    public int getRow()
-    {
+    public int getRow() {
         return row;
     }
 
-    public int getCol()
-    {
+    public int getCol() {
         return col;
     }
 
-    public Slot getSlot()
-    {
+    public Slot getSlot() {
         return slot;
     }
 }

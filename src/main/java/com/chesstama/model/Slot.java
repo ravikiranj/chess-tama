@@ -8,30 +8,25 @@ import java.util.Optional;
  * @author rjanardhana
  * @since Aug 2017
  */
-public class Slot
-{
+public class Slot {
+
     private Optional<Piece> piece;
 
-    public Slot()
-    {
+    public Slot() {
         this.piece = Optional.empty();
     }
 
-    public Optional<Piece> getPiece()
-    {
+    public Optional<Piece> getPiece() {
         return piece;
     }
 
-    public void setPiece(Piece piece)
-    {
+    public void setPiece(Piece piece) {
         this.piece = Optional.of(piece);
     }
 
     @Override
-    public String toString()
-    {
-        if (!piece.isPresent())
-        {
+    public String toString() {
+        if (!piece.isPresent()) {
             return "EMPTY";
         }
         Piece p = piece.get();

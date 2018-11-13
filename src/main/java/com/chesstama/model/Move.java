@@ -9,26 +9,27 @@ import java.util.StringJoiner;
  * @author ravikiranj
  * @since Aug 2017
  */
-public class Move
-{
+public class Move {
+
     private int row;
     private int col;
 
-    public Move(int row, int col)
-    {
+    public Move(int row, int col) {
         this.row = row;
         this.col = col;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public int hashCode() {
+        return Objects.hash(row, col);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         Move move = (Move) o;
@@ -36,37 +37,26 @@ public class Move
     }
 
     @Override
-    public int hashCode()
-    {
-        return Objects.hash(row, col);
-    }
-
-    @Override
-    public String toString()
-    {
+    public String toString() {
         return new StringJoiner(", ", this.getClass().getSimpleName() + "[", "]")
-                .add("col = " + col)
-                .add("row = " + row)
-                .toString();
+            .add("col = " + col)
+            .add("row = " + row)
+            .toString();
     }
 
-    public int getRow()
-    {
+    public int getRow() {
         return row;
     }
 
-    public void setRow(int row)
-    {
+    public void setRow(int row) {
         this.row = row;
     }
 
-    public int getCol()
-    {
+    public int getCol() {
         return col;
     }
 
-    public void setCol(int col)
-    {
+    public void setCol(int col) {
         this.col = col;
     }
 }

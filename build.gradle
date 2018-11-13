@@ -1,15 +1,30 @@
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'checkstyle'
+plugins {
+    id 'java'
+    id 'idea'
+    id 'checkstyle'
+    id 'pmd'
+    id 'io.franzbecker.gradle-lombok' version '1.14'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    // args
     compile group: 'args4j', name: 'args4j', version: '2.33'
+
+    // logging
+    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
+    compile group: 'org.apache.logging.log4j', name:'log4j-slf4j-impl', version: '2.11.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8.2'
+
+    // common libraries
     compile group: 'com.google.guava', name: 'guava', version: '23.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
+
+    // testing
     compile group: 'org.testng', name: 'testng', version: '6.11'
 }
 
@@ -36,9 +51,13 @@ task app(type: JavaExec, dependsOn: 'compileJava') {
     }
 }
 
-tasks.withType(Checkstyle) {
-    reports {
-        xml.enabled false
-        html.enabled true
-    }
+pmd {
+    toolVersion = '6.9.0'
+    ruleSetFiles = files("config/pmd/pmd-java-ruleset.xml")
+    ignoreFailures = true;
+}
+
+lombok {
+    version = "1.16.20"
+    sha256 = ""
 }

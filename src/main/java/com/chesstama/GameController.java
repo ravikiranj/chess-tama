@@ -9,10 +9,9 @@ import javafx.application.Application;
  * @author rjanardhana
  * @since Aug 2017
  */
-public class GameController
-{
-    public static void main(String[] args)
-    {
+public class GameController {
+
+    public static void main(String[] args) {
         Application.launch(GameView.class, args);
     }
 }

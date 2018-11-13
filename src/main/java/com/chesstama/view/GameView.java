@@ -18,9 +18,7 @@ import javafx.stage.Stage;
  * @author ravikiranj
  * @since Sep 2017
  */
-public class GameView extends Application
-{
-    private static final String CHESSTAMA_FXML = "/chesstama.fxml";
+public class GameView extends Application {
 
     private final Game game;
 
@@ -43,13 +41,11 @@ public class GameView extends Application
     private GridPane middleRowGridPane;
     private GridPane bottomRowGridPane;
 
-    public GameView()
-    {
+    public GameView() {
         game = new Game();
     }
 
-    public void initCanvas()
-    {
+    public void initCanvas() {
         // Init canvas
         canvas = new Pane();
         canvas.setPrefSize(1200, 800);
@@ -62,8 +58,7 @@ public class GameView extends Application
         initMovesWindow();
     }
 
-    private void initMainGameVBox()
-    {
+    private void initMainGameVBox() {
         // Main Game VBox containing player cards and board
         mainGameVBox = new VBox();
         outerHBox.getChildren().add(mainGameVBox);
@@ -73,16 +68,14 @@ public class GameView extends Application
         initBottomRowGridPane();
     }
 
-    private void initMovesWindow()
-    {
+    private void initMovesWindow() {
         // Moves window
         movePane = new ScrollPane();
         movePane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         outerHBox.getChildren().add(movePane);
     }
 
-    private void initBottomRowGridPane()
-    {
+    private void initBottomRowGridPane() {
         // Bottom row containing Player 1 cards
         bottomRowGridPane = new GridPane();
         mainGameVBox.getChildren().add(bottomRowGridPane);
@@ -101,11 +94,12 @@ public class GameView extends Application
         Label emptyLabel2 = new Label("EMPTY");
         GridPane.setConstraints(emptyLabel2, 3, 0);
 
-        bottomRowGridPane.getChildren().addAll(emptyLabel1, player1Card1.getPlayerCardButton(), player1Card2.getPlayerCardButton(), emptyLabel2);
+        bottomRowGridPane.getChildren()
+                         .addAll(emptyLabel1, player1Card1.getPlayerCardButton(), player1Card2.getPlayerCardButton(),
+                             emptyLabel2);
     }
 
-    private void initMiddleRowGridPane()
-    {
+    private void initMiddleRowGridPane() {
         // Middle row containing Board and Temporary cards
         middleRowGridPane = new GridPane();
         mainGameVBox.getChildren().add(middleRowGridPane);
@@ -123,11 +117,11 @@ public class GameView extends Application
         player1NextCard = new PlayerCardView(p1, p1.getUpcomingCard());
         GridPane.setConstraints(player1NextCard.getPlayerCardButton(), 3, 0);
 
-        middleRowGridPane.getChildren().addAll(player1NextCard.getPlayerCardButton(), boardGridPane, player2NextCard.getPlayerCardButton());
+        middleRowGridPane.getChildren().addAll(player1NextCard.getPlayerCardButton(), boardGridPane,
+            player2NextCard.getPlayerCardButton());
     }
 
-    private void initTopRowGridPane()
-    {
+    private void initTopRowGridPane() {
         // Top row containing Player 2 cards
         topRowGridPane = new GridPane();
         mainGameVBox.getChildren().add(topRowGridPane);
@@ -146,12 +140,13 @@ public class GameView extends Application
         Label emptyLabel2 = new Label("EMPTY");
         GridPane.setConstraints(emptyLabel2, 3, 0);
 
-        topRowGridPane.getChildren().addAll(emptyLabel1, player2Card1.getPlayerCardButton(), player2Card2.getPlayerCardButton(), emptyLabel2);
+        topRowGridPane.getChildren()
+                      .addAll(emptyLabel1, player2Card1.getPlayerCardButton(), player2Card2.getPlayerCardButton(),
+                          emptyLabel2);
     }
 
     @Override
-    public void start(Stage stage) throws Exception
-    {
+    public void start(Stage stage) throws Exception {
         initCanvas();
 
         Scene scene = new Scene(canvas, 800, 600);
