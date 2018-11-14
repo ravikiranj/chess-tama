@@ -4,6 +4,7 @@ import com.chesstama.model.Card;
 import com.chesstama.model.Game;
 import com.chesstama.model.Piece;
 import com.chesstama.model.Player;
+import com.chesstama.model.Player.PlayerType;
 import com.chesstama.view.PlayerCardView.CardSlot;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
@@ -15,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
@@ -148,6 +150,7 @@ public class GameView extends Application {
         this.game.getBoard().setSelectedCard(card);
     }
 
+    @Nonnull
     public Card getCurrentSelectedCard() {
         return game.getBoard().getSelectedCard();
     }
@@ -164,8 +167,12 @@ public class GameView extends Application {
         game.getBoard().setSelectedPiece(Optional.ofNullable(p));
     }
 
-   public Optional<Piece> getCurrentSelectedPiece() {
-        return game.getBoard().getSelectedPiece();
+    public Optional<Piece> getCurrentSelectedPiece() {
+         return game.getBoard().getSelectedPiece();
+    }
+
+    public PlayerType getCurrentPlayerTurn() {
+        return game.getBoard().getCurrentPlayerTurn();
     }
 
     @Override

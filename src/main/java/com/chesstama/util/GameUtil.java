@@ -10,6 +10,7 @@ import com.chesstama.view.BoardView;
 import com.chesstama.view.GameView;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -44,10 +45,11 @@ public class GameUtil {
         }
 
         BoardView boardView = gameView.getBoardView();
+        PlayerType currentPlayerTurn = gameView.getCurrentPlayerTurn();
         Slot slot = boardSlotView.getSlot();
         Piece piece = slot.getPiece().get();
         boolean isPlayer2Piece = piece.getPlayer().getPlayerType() == PlayerType.P2;
-        Position currentPosition = new Position(slot.getRow(), slot.getCol());
+        Position currentPosition = slot.getPosition();
         for (Position p : card.getValidPositions()) {
             Position newPosition;
             if (isPlayer2Piece) {
@@ -55,11 +57,47 @@ public class GameUtil {
             } else {
                 newPosition = currentPosition.add(p.negate());
             }
-            if (!newPosition.isValid()) {
+
+            boolean hasSamePlayerPiece = doesPositionHaveCurrentPlayerPiece(currentPlayerTurn, boardView, newPosition);
+
+            if (!newPosition.isValid() || hasSamePlayerPiece) {
                 continue;
             }
+
             BoardSlotView validBoardSlotView = boardView.getBoardSlotViews()[newPosition.getRow()][newPosition.getCol()];
             validBoardSlotView.highlightSlot();
         }
+    }
+
+    public static boolean isValidMove(final Position proposedMovePosition,
+                                      final Card currentSelectedCard,
+                                      final PlayerType currentPlayerTurn,
+                                      final BoardView boardView) {
+
+        boolean isPlayer2Piece = currentPlayerTurn == PlayerType.P2;
+        for (Position p : currentSelectedCard.getValidPositions()) {
+            Position newPosition;
+            if (isPlayer2Piece) {
+                newPosition = proposedMovePosition.add(p);
+            } else {
+                newPosition = proposedMovePosition.add(p.negate());
+            }
+
+            boolean hasSamePlayerPiece = doesPositionHaveCurrentPlayerPiece(currentPlayerTurn, boardView, newPosition);
+            if (newPosition.isValid() && newPosition.equals(proposedMovePosition) && !hasSamePlayerPiece) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean doesPositionHaveCurrentPlayerPiece(final PlayerType currentPlayerTurn,
+                                                              final BoardView boardView,
+                                                              final Position position) {
+        BoardSlotView boardSlotForNewPos = boardView.getBoardSlotView(position);
+        Optional<Piece> pieceOptional = boardSlotForNewPos.getSlot().getPiece();
+        return pieceOptional.isPresent() &&
+            pieceOptional.get().getPlayer().getPlayerType() == currentPlayerTurn;
     }
 }

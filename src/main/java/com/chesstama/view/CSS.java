@@ -7,7 +7,7 @@ public enum CSS {
     HIGHLIGHTED_CARD("highlighted-card"),
     HIGHLIGHTED_SQUARE("highlighted-square"),
     HIGHLIGHTED_PIECE_SQUARE("highlighted-piece-square"),
-    BLACK_SQUARE("black-square"),
+    GREY_SQUARE("grey-square"),
     BLUE_SQUARE("blue-square"),
     RED_SQUARE("red-square"),
     PLAYER_CARD("player-card"),
