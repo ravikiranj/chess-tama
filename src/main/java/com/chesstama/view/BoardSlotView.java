@@ -1,11 +1,17 @@
 package com.chesstama.view;
 
+import com.chesstama.model.Card;
+import com.chesstama.model.Piece;
+import com.chesstama.model.Player.PlayerType;
+import com.chesstama.model.Position;
 import com.chesstama.model.Slot;
 import com.chesstama.util.GameUtil;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
 
 /**
  * BoardSlotView
@@ -82,6 +88,7 @@ public class BoardSlotView extends StackPane {
         public void handle(final MouseEvent event) {
             log.info("BoardSlotView clicked = {}", this.boardSlotView);
             if (!this.boardSlotView.slot.getPiece().isPresent()) {
+                handlePieceMovement();
                 return;
             }
             this.boardSlotView.gameView.getBoardView().clearAllBoardSlotViews();
@@ -89,6 +96,32 @@ public class BoardSlotView extends StackPane {
             this.boardSlotView.highlightPieceSlot();
             this.boardSlotView.gameView.setCurrentSelectedPiece(this.boardSlotView.slot.getPiece().get());
             GameUtil.highlightValidMoves(this.boardSlotView, this.boardSlotView.gameView);
+        }
+
+        private void handlePieceMovement() {
+            Optional<Piece> currentSelectedPieceOptional = this.boardSlotView.gameView.getCurrentSelectedPiece();
+            if (!currentSelectedPieceOptional.isPresent()) {
+                return;
+            }
+
+            // Piece currentSelectedPiece = currentSelectedPieceOptional.get();
+            Card currentSelectedCard = this.boardSlotView.gameView.getCurrentSelectedCard();
+            Position proposedMovePosition = this.boardSlotView.slot.getPosition();
+            PlayerType currentPlayerTurn = this.boardSlotView.gameView.getCurrentPlayerTurn();
+            if (!GameUtil.isValidMove(proposedMovePosition, currentSelectedCard, currentPlayerTurn,
+                boardSlotView.getGameView().getBoardView())) {
+                return;
+            }
+
+            // Move pawn to new space
+            // check if new space has opponent pawns - run capture logic
+                // capture logic
+                //  (a) Check  opponent master, if yes, declare winner
+                //  (b) Add student to removed pieces list
+            // Clean old space
+            // update player turn
+            // update main card
+            // update next cards
         }
     }
 

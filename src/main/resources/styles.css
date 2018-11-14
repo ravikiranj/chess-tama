@@ -36,8 +36,8 @@
     -fx-border-width: 5px;
 }
 
-.black-square {
-    -fx-background-color: black;
+.grey-square {
+    -fx-background-color: #ABB2B9;
 }
 
 .blue-square {

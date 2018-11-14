@@ -12,13 +12,11 @@ import java.util.Optional;
  */
 public class Slot {
 
-    private final int row;
-    private final int col;
+    private final Position position;
     private Optional<Piece> piece;
 
     public Slot(final int row, final int col) {
-        this.row = row;
-        this.col = col;
+        this.position = new Position(row, col);
         this.piece = Optional.empty();
     }
 
@@ -36,7 +34,7 @@ public class Slot {
                                 .orElse("");
 
         StringBuilder sb = new StringBuilder();
-        sb.append('(').append(row).append(", ").append(col).append(')');
+        sb.append('(').append(position.getRow()).append(", ").append(position.getCol()).append(')');
 
         if (StringUtils.isNotEmpty(pieceName)) {
             sb.append(" - ");
@@ -46,11 +44,8 @@ public class Slot {
         return sb.toString();
     }
 
-    public int getRow() {
-        return row;
+    public Position getPosition() {
+        return position;
     }
 
-    public int getCol() {
-        return col;
-    }
 }

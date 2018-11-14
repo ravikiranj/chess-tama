@@ -90,7 +90,7 @@ public class PlayerCardView extends VBox {
             }
 
             GameView gameView = this.playerCardView.gameView;
-            PlayerType currPlayerTurn = gameView.getGame().getBoard().getCurrentPlayerTurn();
+            PlayerType currPlayerTurn = gameView.getCurrentPlayerTurn();
 
             if (currPlayerTurn != this.playerCardView.currentPlayer.getPlayerType() ||
                 this.playerCardView.cardSlot != CardSlot.MAIN) {
@@ -131,7 +131,7 @@ public class PlayerCardView extends VBox {
         }
 
         if (currentPosition.equals(Board.MASTER_POSITION)) {
-            return CSS.BLACK_SQUARE.getName();
+            return CSS.GREY_SQUARE.getName();
         }
 
         if (validPositions.contains(currentPosition)) {
