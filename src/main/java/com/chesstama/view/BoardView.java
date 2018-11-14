@@ -32,5 +32,6 @@ public class BoardView extends GridPane {
         }
 
         GridPane.setConstraints(this, 1, 0, 2, 1);
+        this.getStyleClass().add(CSS.GAMEBOARD.getName());
     }
 }

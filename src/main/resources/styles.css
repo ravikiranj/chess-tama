@@ -3,11 +3,22 @@
     -fx-padding: 10px;
 }
 
+.square.card-square {
+    -fx-font-size: 1em;
+    -fx-padding: 5px;
+}
+
 .gamerow {
     -fx-alignment: center;
     -fx-padding: 10px;
     -fx-border-insets: 10px;
     -fx-background-insets: 10px;
+}
+
+.gameboard {
+    -fx-padding: 20px 40px;
+    -fx-border-insets: 20px 40px;
+    -fx-background-insets: 20px 40px;
 }
 
 .highlighted {
@@ -27,5 +38,11 @@
 }
 
 .player-card {
-    -fx-padding: 10px;
+    -fx-padding: 20px;
+    -fx-border-insets: 20px;
+    -fx-background-insets: 20px;
+}
+
+.player-card-holder {
+    -fx-alignment: center;
 }
