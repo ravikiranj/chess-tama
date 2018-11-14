@@ -1,6 +1,9 @@
 package com.chesstama.model;
 
+import com.chesstama.model.Player.PlayerType;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
 
 /**
  * Board
@@ -24,11 +27,19 @@ public class Board {
     private final Player p1;
     private final Player p2;
 
+    private final PlayerType currentPlayerTurn;
+
+    private Card selectedCard;
+    private Optional<Piece> selectedPiece;
+
     public Board(final Player p1, final Player p2) {
         // We will make the gameBoard a 1-index based grid in order to simplify checks
         this.gameBoard = new Slot[MAX_ROWS + 1][MAX_COLS + 1];
         this.p1 = p1;
         this.p2 = p2;
+        this.currentPlayerTurn = PlayerType.P1;
+        this.selectedCard = this.p1.getCards().get(0);
+        this.selectedPiece = Optional.empty();
 
         initBoard();
 
@@ -62,6 +73,22 @@ public class Board {
         return gameBoard[row][col];
     }
 
+    public Card getSelectedCard() {
+        return selectedCard;
+    }
+
+    public void setSelectedCard(final Card card) {
+        selectedCard = card;
+    }
+
+    public Optional<Piece> getSelectedPiece() {
+        return selectedPiece;
+    }
+
+    public void setSelectedPiece(final Optional<Piece> selectedPiece) {
+        this.selectedPiece = selectedPiece;
+    }
+
     public Player getPlayer1() {
         return p1;
     }
@@ -69,4 +96,9 @@ public class Board {
     public Player getPlayer2() {
         return p2;
     }
+
+    public PlayerType getCurrentPlayerTurn() {
+        return currentPlayerTurn;
+    }
+
 }

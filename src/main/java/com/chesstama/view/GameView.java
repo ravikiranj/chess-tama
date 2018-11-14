@@ -1,7 +1,10 @@
 package com.chesstama.view;
 
+import com.chesstama.model.Card;
 import com.chesstama.model.Game;
+import com.chesstama.model.Piece;
 import com.chesstama.model.Player;
+import com.chesstama.view.PlayerCardView.CardSlot;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -11,6 +14,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 /**
  * GameView
@@ -79,10 +84,11 @@ public class GameView extends Application {
 
         // Player 1 cards
         Player p1 = game.getP1();
-        player1Card1 = new PlayerCardView(p1, p1.getCards().get(0));
+        player1Card1 = new PlayerCardView(p1, p1.getCards().get(0), CardSlot.MAIN, this);
+        player1Card1.selectCard();
         GridPane.setConstraints(player1Card1, 1, 0);
 
-        player1Card2 = new PlayerCardView(p1, p1.getCards().get(1));
+        player1Card2 = new PlayerCardView(p1, p1.getCards().get(1), CardSlot.MAIN, this);
         GridPane.setConstraints(player1Card2, 2, 0);
 
         bottomRowGridPane.getChildren()
@@ -97,14 +103,14 @@ public class GameView extends Application {
 
         // Player 2 temp card
         Player p2 = game.getP2();
-        player2NextCard = new PlayerCardView(p2, p2.getUpcomingCard());
+        player2NextCard = new PlayerCardView(p2, p2.getUpcomingCard(), CardSlot.NEXT, this);
         GridPane.setConstraints(player2NextCard, 0, 0);
 
-        boardView = new BoardView(game);
+        boardView = new BoardView(this);
         GridPane.setConstraints(boardView, 1, 0, 2, 1);
 
         Player p1 = game.getP1();
-        player1NextCard = new PlayerCardView(p1, p1.getUpcomingCard());
+        player1NextCard = new PlayerCardView(p1, p1.getUpcomingCard(), CardSlot.NEXT, this);
         GridPane.setConstraints(player1NextCard, 3, 0);
 
         middleRowGridPane.getChildren().addAll(player1NextCard, boardView, player2NextCard);
@@ -118,14 +124,48 @@ public class GameView extends Application {
 
         // Player 2 cards
         Player p2 = game.getP2();
-        player2Card1 = new PlayerCardView(p2, p2.getCards().get(0));
+        player2Card1 = new PlayerCardView(p2, p2.getCards().get(0), CardSlot.MAIN, this);
         GridPane.setConstraints(player2Card1, 1, 0);
 
-        player2Card2 = new PlayerCardView(p2, p2.getCards().get(1));
+        player2Card2 = new PlayerCardView(p2, p2.getCards().get(1), CardSlot.MAIN, this);
         GridPane.setConstraints(player2Card2, 2, 0);
 
         topRowGridPane.getChildren()
                       .addAll(player2Card1, player2Card2);
+    }
+
+    public void unselectAllPlayerCards() {
+        player1Card1.unselectCard();
+        player1Card2.unselectCard();
+        player1NextCard.unselectCard();
+
+        player2Card1.unselectCard();
+        player2Card2.unselectCard();
+        player2NextCard.unselectCard();
+    }
+
+    public void updateSelectedCard(final Card card) {
+        this.game.getBoard().setSelectedCard(card);
+    }
+
+    public Card getCurrentSelectedCard() {
+        return game.getBoard().getSelectedCard();
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public BoardView getBoardView() {
+        return boardView;
+    }
+
+    public void setCurrentSelectedPiece(final Piece p) {
+        game.getBoard().setSelectedPiece(Optional.ofNullable(p));
+    }
+
+   public Optional<Piece> getCurrentSelectedPiece() {
+        return game.getBoard().getSelectedPiece();
     }
 
     @Override

@@ -24,6 +24,23 @@ public class Position {
         return Objects.hash(col, row);
     }
 
+    public Position add(final Position p) {
+        int newRow = row + p.row;
+        int newCol = col + p.col;
+        return new Position(newRow, newCol);
+    }
+
+    public Position negate() {
+        int newRow = row * -1;
+        int newCol = col * -1;
+        return new Position(newRow, newCol);
+    }
+
+    public boolean isValid() {
+        return row >= Board.MIN_ROWS && row <= Board.MAX_ROWS &&
+               col >= Board.MIN_COLS && col <= Board.MAX_COLS;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

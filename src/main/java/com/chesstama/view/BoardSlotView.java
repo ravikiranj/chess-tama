@@ -1,7 +1,7 @@
 package com.chesstama.view;
 
 import com.chesstama.model.Slot;
-import com.chesstama.util.JavaFXUtil;
+import com.chesstama.util.GameUtil;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -16,17 +16,19 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardSlotView extends StackPane {
 
     private final Slot slot;
+    private final GameView gameView;
     private final Label slotLabel;
     private boolean isHighlighted;
 
-    public BoardSlotView(final Slot slot) {
-        this(slot, EventHandlerConfig.ENABLED);
+    public BoardSlotView(final Slot slot, final GameView gameView) {
+        this(slot, gameView, EventHandlerConfig.ENABLED);
     }
 
-    public BoardSlotView(final Slot slot, final EventHandlerConfig eventHandlerConfig) {
+    public BoardSlotView(final Slot slot, final GameView gameView, final EventHandlerConfig eventHandlerConfig) {
         super();
 
         this.slot = slot;
+        this.gameView = gameView;
         this.slotLabel = new Label(slot.toString());
         this.isHighlighted = false;
 
@@ -38,12 +40,30 @@ public class BoardSlotView extends StackPane {
         }
     }
 
-    public void toggleHighlighted() {
-        if (isHighlighted) {
-            isHighlighted = false;
-        } else {
-            isHighlighted = true;
-        }
+    public Slot getSlot() {
+        return slot;
+    }
+
+    public GameView getGameView() {
+        return gameView;
+    }
+
+    public void highlightSlot() {
+        this.getStyleClass().add(CSS.HIGHLIGHTED_SQUARE.getName());
+        isHighlighted = true;
+    }
+
+    public void unhighlightSlot() {
+        this.getStyleClass().remove(CSS.HIGHLIGHTED_SQUARE.getName());
+        isHighlighted = false;
+    }
+
+    public void highlightPieceSlot() {
+        this.getStyleClass().add(CSS.HIGHLIGHTED_PIECE_SQUARE.getName());
+    }
+
+    public void unhighlightPieceSlot() {
+        this.getStyleClass().remove(CSS.HIGHLIGHTED_PIECE_SQUARE.getName());
     }
 
     private void setEventHandlers() {
@@ -60,9 +80,15 @@ public class BoardSlotView extends StackPane {
 
         @Override
         public void handle(final MouseEvent event) {
-            this.boardSlotView.toggleHighlighted();
-            JavaFXUtil.toggleCSSClass(this.boardSlotView, CSS.HIGHLIGHTED.getName());
             log.info("BoardSlotView clicked = {}", this.boardSlotView);
+            if (!this.boardSlotView.slot.getPiece().isPresent()) {
+                return;
+            }
+            this.boardSlotView.gameView.getBoardView().clearAllBoardSlotViews();
+            this.boardSlotView.highlightSlot();
+            this.boardSlotView.highlightPieceSlot();
+            this.boardSlotView.gameView.setCurrentSelectedPiece(this.boardSlotView.slot.getPiece().get());
+            GameUtil.highlightValidMoves(this.boardSlotView, this.boardSlotView.gameView);
         }
     }
 
@@ -74,8 +100,8 @@ public class BoardSlotView extends StackPane {
         return sb.toString();
     }
 
-    public static enum EventHandlerConfig {
+    public enum EventHandlerConfig {
         ENABLED,
-        DISABLED;
+        DISABLED
     }
 }

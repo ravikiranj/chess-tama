@@ -21,8 +21,19 @@
     -fx-background-insets: 20px 40px;
 }
 
-.highlighted {
+.highlighted-square {
     -fx-background-color: #48C9B0;
+}
+
+.highlighted-piece-square {
+    -fx-border-color: red;
+    -fx-border-width: 2px;
+}
+
+.highlighted-card {
+    -fx-border-color: #F39C12;
+    -fx-border-style: solid;
+    -fx-border-width: 5px;
 }
 
 .black-square {
