@@ -2,7 +2,6 @@ package com.chesstama.view;
 
 import com.chesstama.model.Slot;
 import com.chesstama.util.JavaFXUtil;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -21,6 +20,10 @@ public class BoardSlotView extends StackPane {
     private boolean isHighlighted;
 
     public BoardSlotView(final Slot slot) {
+        this(slot, EventHandlerConfig.ENABLED);
+    }
+
+    public BoardSlotView(final Slot slot, final EventHandlerConfig eventHandlerConfig) {
         super();
 
         this.slot = slot;
@@ -30,7 +33,9 @@ public class BoardSlotView extends StackPane {
         getChildren().addAll(slotLabel);
         getStyleClass().add(CSS.SQUARE.getName());
 
-        setEventHandlers();
+        if (eventHandlerConfig == EventHandlerConfig.ENABLED) {
+            setEventHandlers();
+        }
     }
 
     public void toggleHighlighted() {
@@ -46,7 +51,7 @@ public class BoardSlotView extends StackPane {
     }
 
     @Slf4j
-    private static class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
+    private static class BoardSlotViewClickHandler implements javafx.event.EventHandler<MouseEvent> {
         private final BoardSlotView boardSlotView;
 
         public BoardSlotViewClickHandler(final BoardSlotView boardSlotView) {
@@ -67,5 +72,10 @@ public class BoardSlotView extends StackPane {
         sb.append(String.format("Slot = %s", this.slot.toString()));
         sb.append(String.format(", isHighlighted = %s", this.isHighlighted));
         return sb.toString();
+    }
+
+    public static enum EventHandlerConfig {
+        ENABLED,
+        DISABLED;
     }
 }

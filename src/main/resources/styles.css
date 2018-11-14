@@ -13,3 +13,19 @@
 .highlighted {
     -fx-background-color: #48C9B0;
 }
+
+.black-square {
+    -fx-background-color: black;
+}
+
+.blue-square {
+    -fx-background-color: blue;
+}
+
+.red-square {
+    -fx-background-color: red;
+}
+
+.player-card {
+    -fx-padding: 10px;
+}

@@ -101,14 +101,13 @@ public class GameView extends Application {
         GridPane.setConstraints(player2NextCard, 0, 0);
 
         boardView = new BoardView(game);
-        GridPane boardGridPane = boardView.getBoardGridPane();
-        GridPane.setConstraints(boardGridPane, 1, 0, 2, 1);
+        GridPane.setConstraints(boardView, 1, 0, 2, 1);
 
         Player p1 = game.getP1();
         player1NextCard = new PlayerCardView(p1, p1.getUpcomingCard());
         GridPane.setConstraints(player1NextCard, 3, 0);
 
-        middleRowGridPane.getChildren().addAll(player1NextCard, boardGridPane, player2NextCard);
+        middleRowGridPane.getChildren().addAll(player1NextCard, boardView, player2NextCard);
     }
 
     private void initTopRowGridPane() {
