@@ -58,9 +58,12 @@ public class GameUtil {
                 newPosition = currentPosition.add(p.negate());
             }
 
-            boolean hasSamePlayerPiece = doesPositionHaveCurrentPlayerPiece(currentPlayerTurn, boardView, newPosition);
+            if (!newPosition.isValid()) {
+                continue;
+            }
 
-            if (!newPosition.isValid() || hasSamePlayerPiece) {
+            boolean hasSamePlayerPiece = doesPositionHaveCurrentPlayerPiece(currentPlayerTurn, boardView, newPosition);
+            if (hasSamePlayerPiece) {
                 continue;
             }
 
