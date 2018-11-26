@@ -75,6 +75,15 @@ public class PlayerCardView extends VBox {
         this.setOnMouseClicked(new PlayerCardViewClickHandler(this));
     }
 
+    @Override
+    public String toString() {
+        return "PlayerCardView{" +
+            "currentPlayer=" + currentPlayer +
+            ", card=" + card +
+            ", isNotEmpty=" + isNotEmpty +
+            '}';
+    }
+
     @Slf4j
     private static class PlayerCardViewClickHandler implements javafx.event.EventHandler<MouseEvent> {
         private final PlayerCardView playerCardView;
@@ -94,6 +103,7 @@ public class PlayerCardView extends VBox {
 
             if (currPlayerTurn != this.playerCardView.currentPlayer.getPlayerType() ||
                 this.playerCardView.cardSlot != CardSlot.MAIN) {
+                log.info("Player Card isn't main or not of current player type, playerCardView = {} ", playerCardView);
                 return;
             }
 

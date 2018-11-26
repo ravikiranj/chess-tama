@@ -37,7 +37,7 @@ public class Board {
         this.gameBoard = new Slot[MAX_ROWS + 1][MAX_COLS + 1];
         this.p1 = p1;
         this.p2 = p2;
-        this.currentPlayerTurn = PlayerType.P1;
+        this.currentPlayerTurn = this.p1.getPlayerType();
         this.selectedCard = this.p1.getCards().get(0);
         this.selectedPiece = Optional.empty();
 

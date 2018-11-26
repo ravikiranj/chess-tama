@@ -91,6 +91,13 @@ public class BoardSlotView extends StackPane {
                 handlePieceMovement();
                 return;
             }
+
+            // Only allow selection of current player pieces
+            PlayerType pieceOfPlayer = boardSlotView.slot.getPiece().get().getPlayer().getPlayerType();
+            if (pieceOfPlayer != boardSlotView.gameView.getCurrentPlayerTurn()) {
+                return;
+            }
+
             this.boardSlotView.gameView.getBoardView().clearAllBoardSlotViews();
             this.boardSlotView.highlightSlot();
             this.boardSlotView.highlightPieceSlot();
@@ -105,11 +112,15 @@ public class BoardSlotView extends StackPane {
             }
 
             // Piece currentSelectedPiece = currentSelectedPieceOptional.get();
+            Piece currentSelectedPiece = currentSelectedPieceOptional.get();
             Card currentSelectedCard = this.boardSlotView.gameView.getCurrentSelectedCard();
             Position proposedMovePosition = this.boardSlotView.slot.getPosition();
             PlayerType currentPlayerTurn = this.boardSlotView.gameView.getCurrentPlayerTurn();
-            if (!GameUtil.isValidMove(proposedMovePosition, currentSelectedCard, currentPlayerTurn,
-                boardSlotView.getGameView().getBoardView())) {
+            Position currentSelectedPiecePosition = currentSelectedPiece.getPosition();
+
+            if (!GameUtil.isValidMove(currentSelectedPiecePosition, proposedMovePosition,
+                currentSelectedCard, currentPlayerTurn, boardSlotView.getGameView().getBoardView())) {
+                log.info("Invalid move, not possible to move");
                 return;
             }
 
@@ -122,6 +133,7 @@ public class BoardSlotView extends StackPane {
             // update player turn
             // update main card
             // update next cards
+            log.info("Valid move, need to handle logic");
         }
     }
 

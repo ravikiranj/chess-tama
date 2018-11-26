@@ -60,8 +60,8 @@ public class Position {
     @Override
     public String toString() {
         return new StringJoiner(", ", this.getClass().getSimpleName() + "[", "]")
-            .add("col = " + col)
             .add("row = " + row)
+            .add("col = " + col)
             .toString();
     }
 

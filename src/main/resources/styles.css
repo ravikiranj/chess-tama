@@ -41,11 +41,11 @@
 }
 
 .blue-square {
-    -fx-background-color: blue;
+    -fx-background-color: lightblue;
 }
 
 .red-square {
-    -fx-background-color: red;
+    -fx-background-color: #FF9999;
 }
 
 .player-card {

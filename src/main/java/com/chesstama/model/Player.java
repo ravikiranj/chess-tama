@@ -32,7 +32,7 @@ public class Player {
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void initPieces() {
-        int row = playerType == P1 ? Board.MIN_ROWS : Board.MAX_ROWS;
+        int row = playerType == P1 ? Board.MAX_ROWS : Board.MIN_ROWS;
         // Add master
         this.pieces.add(new Master(this, new Position(row, MASTER_COL)));
 

@@ -8,6 +8,7 @@ import com.chesstama.model.Slot;
 import com.chesstama.view.BoardSlotView;
 import com.chesstama.view.BoardView;
 import com.chesstama.view.GameView;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
  * @author ravikiranj
  * @since Aug 2017
  */
+@Slf4j
 public class GameUtil {
 
     public static <T> List<T> getRandomSubList(final List<T> input, final int subsetSize) {
@@ -53,26 +55,32 @@ public class GameUtil {
         for (Position p : card.getValidPositions()) {
             Position newPosition;
             if (isPlayer2Piece) {
-                newPosition = currentPosition.add(p);
-            } else {
                 newPosition = currentPosition.add(p.negate());
+            } else {
+                newPosition = currentPosition.add(p);
             }
 
             if (!newPosition.isValid()) {
+                log.info("For pos = {}, NewPos = {} is invalid", p, newPosition);
                 continue;
             }
 
+
             boolean hasSamePlayerPiece = doesPositionHaveCurrentPlayerPiece(currentPlayerTurn, boardView, newPosition);
             if (hasSamePlayerPiece) {
+                log.info("For pos = {}, NewPos = {} is invalid as it has same player piece", p, newPosition);
                 continue;
             }
+
+            log.info("For pos = {}, NewPos = {} is valid", p, newPosition);
 
             BoardSlotView validBoardSlotView = boardView.getBoardSlotViews()[newPosition.getRow()][newPosition.getCol()];
             validBoardSlotView.highlightSlot();
         }
     }
 
-    public static boolean isValidMove(final Position proposedMovePosition,
+    public static boolean isValidMove(final Position currentSelectedPiecePosition,
+                                      final Position proposedMovePosition,
                                       final Card currentSelectedCard,
                                       final PlayerType currentPlayerTurn,
                                       final BoardView boardView) {
@@ -81,12 +89,21 @@ public class GameUtil {
         for (Position p : currentSelectedCard.getValidPositions()) {
             Position newPosition;
             if (isPlayer2Piece) {
-                newPosition = proposedMovePosition.add(p);
+                newPosition = currentSelectedPiecePosition.add(p.negate());
             } else {
-                newPosition = proposedMovePosition.add(p.negate());
+                newPosition = currentSelectedPiecePosition.add(p);
+            }
+
+            if (!newPosition.isValid()) {
+                log.info("CurrentPos = {}, cardMove = {}, newPosition = {} is invalid",
+                    currentSelectedPiecePosition, p, newPosition);
+                continue;
             }
 
             boolean hasSamePlayerPiece = doesPositionHaveCurrentPlayerPiece(currentPlayerTurn, boardView, newPosition);
+            log.info("CurrentPos = {}, cardMove = {}, newPosition = {}, hasSamePlayerPiece = {}",
+                currentSelectedPiecePosition, p, newPosition, hasSamePlayerPiece);
+
             if (newPosition.isValid() && newPosition.equals(proposedMovePosition) && !hasSamePlayerPiece) {
                 return true;
             }
