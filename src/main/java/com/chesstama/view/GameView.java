@@ -24,8 +24,6 @@ import java.util.Optional;
 /**
  * GameView
  *
- * TODO: Refactor to ensure X-View contains X-Model only (example: GameView has Game model, BoardView has Board model)
- *
  * @author ravikiranj
  * @since Sep 2017
  */
