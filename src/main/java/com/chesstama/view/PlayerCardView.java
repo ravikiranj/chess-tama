@@ -1,5 +1,6 @@
 package com.chesstama.view;
 
+import com.chesstama.handlers.NoOpClickHandler;
 import com.chesstama.handlers.PlayerCardViewClickHandler;
 import com.chesstama.model.Board;
 import com.chesstama.model.Card;
@@ -136,6 +137,10 @@ public class PlayerCardView extends VBox {
 
     private void setEventHandlers() {
         this.setOnMouseClicked(new PlayerCardViewClickHandler(this));
+    }
+
+    public void disableEventHandlers() {
+        this.setOnMouseClicked(new NoOpClickHandler());
     }
 
     @Override

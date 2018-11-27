@@ -4,6 +4,7 @@ import com.chesstama.model.Piece;
 import com.chesstama.model.Player.PlayerType;
 import com.chesstama.util.GameUtil;
 import com.chesstama.view.BoardSlotView;
+import com.chesstama.view.BoardView;
 import com.chesstama.view.GameView;
 import com.chesstama.view.PlayerCardView;
 import com.chesstama.view.PlayerCardView.CardSlot;
@@ -14,9 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PlayerCardViewClickHandler implements EventHandler<MouseEvent> {
     private final PlayerCardView playerCardView;
+    private final GameView gameView;
 
     public PlayerCardViewClickHandler(final PlayerCardView playerCardView) {
         this.playerCardView = playerCardView;
+        gameView = playerCardView.getGameView();
     }
 
     @Override
@@ -25,7 +28,6 @@ public class PlayerCardViewClickHandler implements EventHandler<MouseEvent> {
             return;
         }
 
-        GameView gameView = this.playerCardView.getGameView();
         PlayerType currPlayerTurn = gameView.getCurrentPlayerTurn();
 
         if (currPlayerTurn != this.playerCardView.getCardOfPlayer() ||
@@ -34,8 +36,9 @@ public class PlayerCardViewClickHandler implements EventHandler<MouseEvent> {
             return;
         }
 
+        BoardView boardView = gameView.getBoardView();
         gameView.unselectAllPlayerCards();
-        gameView.getBoardView().clearAllBoardSlotViews();
+        boardView.clearAllBoardSlotViews();
         gameView.updateSelectedCard(this.playerCardView.getCard());
         this.playerCardView.selectCard();
         if (this.playerCardView.getGameView().getCurrentSelectedPiece().isPresent()) {
@@ -45,7 +48,6 @@ public class PlayerCardViewClickHandler implements EventHandler<MouseEvent> {
     }
 
     private void updateValidPositions() {
-        GameView gameView = this.playerCardView.getGameView();
         Piece currentSelectedPiece = gameView.getCurrentSelectedPiece().get();
         BoardSlotView boardSlotView = gameView.getBoardView().getBoardSlotView(currentSelectedPiece.getPosition());
         boardSlotView.highlightSlot();

@@ -1,13 +1,19 @@
 package com.chesstama.handlers;
 
+import com.chesstama.model.Board;
 import com.chesstama.model.Card;
+import com.chesstama.model.GameMoveStatus;
 import com.chesstama.model.Piece;
 import com.chesstama.model.Player;
 import com.chesstama.model.Player.PlayerType;
 import com.chesstama.model.Position;
 import com.chesstama.util.GameUtil;
 import com.chesstama.view.BoardSlotView;
+import com.chesstama.view.BoardView;
+import com.chesstama.view.GameView;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,87 +23,166 @@ import java.util.Optional;
 @Slf4j
 public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
     private final BoardSlotView boardSlotView;
+    private final GameView gameView;
 
     public BoardSlotViewClickHandler(final BoardSlotView boardSlotView) {
         this.boardSlotView = boardSlotView;
+        gameView = boardSlotView.getGameView();
     }
 
     @Override
     public void handle(final MouseEvent event) {
-        log.info("BoardSlotView clicked = {}", this.boardSlotView);
-        if (!this.boardSlotView.getSlot().getPiece().isPresent()) {
+        log.info("BoardSlotView clicked = {}", boardSlotView);
+
+        // Target square is empty, handle piece movement if there is a current piece selected
+        if (!boardSlotView.getSlot().getPiece().isPresent()) {
             handlePieceMovement();
             return;
         }
 
-        // Only allow selection of current player pieces
-        PlayerType pieceOfPlayer = boardSlotView.getSlot().getPiece().get().getPlayer().getPlayerType();
-        if (pieceOfPlayer != boardSlotView.getGameView().getCurrentPlayerTurn()) {
+        // Don't allow selection of opponent piece when there is no current player piece selected
+        Optional<Piece> currentSelectedPieceOptional = gameView.getCurrentSelectedPiece();
+        PlayerType proposedMovePlayerPiece = boardSlotView.getSlot().getPiece().get().getPlayer().getPlayerType();
+        if (proposedMovePlayerPiece != gameView.getCurrentPlayerTurn() && !currentSelectedPieceOptional.isPresent()) {
             return;
         }
 
-        this.boardSlotView.getGameView().getBoardView().clearAllBoardSlotViews();
-        this.boardSlotView.highlightSlot();
-        this.boardSlotView.highlightPieceSlot();
-        this.boardSlotView.getGameView().setCurrentSelectedPiece(this.boardSlotView.getSlot().getPiece().get());
-        GameUtil.highlightValidMoves(this.boardSlotView, this.boardSlotView.getGameView());
+        // If current player piece is selected and target square has opponent piece, handle movement
+        if (currentSelectedPieceOptional.isPresent() &&
+            currentSelectedPieceOptional.get().getPlayer().getPlayerType() != proposedMovePlayerPiece) {
+            handlePieceMovement();
+            return;
+        }
+
+        BoardView boardView = gameView.getBoardView();
+        boardView.clearAllBoardSlotViews();
+        boardSlotView.highlightSlot();
+        boardSlotView.highlightPieceSlot();
+        gameView.setCurrentSelectedPiece(boardSlotView.getSlot().getPiece().get());
+        GameUtil.highlightValidMoves(boardSlotView, gameView);
     }
 
     private void handlePieceMovement() {
-        Optional<Piece> currentSelectedPieceOptional = this.boardSlotView.getGameView().getCurrentSelectedPiece();
+        Optional<Piece> currentSelectedPieceOptional = gameView.getCurrentSelectedPiece();
         if (!currentSelectedPieceOptional.isPresent()) {
             return;
         }
 
+        BoardView boardView = gameView.getBoardView();
+
         // Piece currentSelectedPiece = currentSelectedPieceOptional.get();
         Piece currentSelectedPiece = currentSelectedPieceOptional.get();
-        Card currentSelectedCard = this.boardSlotView.getGameView().getCurrentSelectedCard();
-        Position proposedMovePosition = this.boardSlotView.getSlot().getPosition();
-        PlayerType currentPlayerTurn = this.boardSlotView.getGameView().getCurrentPlayerTurn();
+        Card currentSelectedCard = gameView.getCurrentSelectedCard();
+        Position proposedMovePosition = boardSlotView.getSlot().getPosition();
+        PlayerType currentPlayerTurn = gameView.getCurrentPlayerTurn();
         Position currentSelectedPiecePosition = currentSelectedPiece.getPosition();
 
         if (!GameUtil.isValidMove(currentSelectedPiecePosition, proposedMovePosition,
-            currentSelectedCard, currentPlayerTurn, boardSlotView.getGameView().getBoardView())) {
+            currentSelectedCard, currentPlayerTurn, boardView)) {
             log.info("Invalid move, not possible to move");
             return;
         }
+
+        // Capture Logic
+        GameMoveStatus gameMoveStatus = runCaptureLogic(currentPlayerTurn, proposedMovePosition);
+        log.info("Player Turn = {}, GameMoveStatus = {}", currentPlayerTurn, gameMoveStatus);
 
         // Change piece position
         currentSelectedPiece.setPosition(proposedMovePosition);
 
         // Change board slots
-        boardSlotView.getGameView().getBoardView().setBoardSlotView(currentSelectedPiecePosition, null);
-        boardSlotView.getGameView().getBoardView().setBoardSlotView(proposedMovePosition, currentSelectedPiece);
+        boardView.setBoardSlotView(currentSelectedPiecePosition, null);
+        boardView.setBoardSlotView(proposedMovePosition, currentSelectedPiece);
 
         // Update board view
-        this.boardSlotView.getGameView().getGame().getBoard().setSelectedPiece(Optional.ofNullable(null));
-        boardSlotView.getGameView().getBoardView().updateView();
-        boardSlotView.getGameView().getBoardView().clearAllBoardSlotViews();
+        Board board = gameView.getGame().getBoard();
+        board.setSelectedPiece(Optional.ofNullable(null));
+        boardView.updateView();
+        boardView.clearAllBoardSlotViews();
 
-        // TODO: capture logic
-        // check if new space has opponent pawns - run capture logic
-        // capture logic
-        //  (a) Check  opponent master, if yes, declare winner
-        //  (b) Add student to removed pieces list
+        if (GameMoveStatus.GAME_END_STATUSES.contains(gameMoveStatus)) {
+            triggerGameEnd(gameMoveStatus);
+            return;
+        }
 
         // Update player turn
-        PlayerType nextPlayerTurn = boardSlotView.getGameView().getGame().getBoard().togglePlayerTurn();
-        boardSlotView.getGameView().updateCurrentPlayerLabel();
+        PlayerType nextPlayerTurn = board.togglePlayerTurn();
+        gameView.updateCurrentPlayerLabel();
 
         // Update main and upcoming cards
         updateCards(nextPlayerTurn, currentSelectedCard);
     }
 
+    private void triggerGameEnd(final GameMoveStatus gameMoveStatus) {
+        gameView.disableAllHandlers();
+        gameView.updateCurrentPlayerLabel(gameMoveStatus.getStatusString());
+
+        showGameEndAlert(gameMoveStatus);
+    }
+
+    private void showGameEndAlert(final GameMoveStatus gameMoveStatus) {
+        Alert gameEndAlert = new Alert(AlertType.INFORMATION);
+        gameEndAlert.setTitle(GameView.CHESS_TAMA);
+        gameEndAlert.setHeaderText(null);
+        gameEndAlert.setContentText(gameMoveStatus.getStatusString());
+        gameEndAlert.showAndWait();
+    }
+
+    private GameMoveStatus runCaptureLogic(final PlayerType currentPlayerTurn,
+                                           final Position proposedMovePosition) {
+        BoardView boardView = gameView.getBoardView();
+
+        BoardSlotView boardSlotView = boardView.getBoardSlotView(proposedMovePosition);
+        Optional<Piece> proposedMoveSlotPieceOptional = boardSlotView.getSlot().getPiece();
+        Position opponentMasterHome = currentPlayerTurn == PlayerType.P1 ?
+            new Position(Board.MIN_ROWS, Board.MASTER_COL) : new Position(Board.MAX_ROWS, Board.MASTER_COL);
+
+        if (!proposedMoveSlotPieceOptional.isPresent()) {
+            if (proposedMovePosition.equals(opponentMasterHome)) {
+                return currentPlayerTurn == PlayerType.P1 ?
+                    GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE :
+                    GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE;
+            }
+            return currentPlayerTurn == PlayerType.P1 ? GameMoveStatus.PLAYER1_MOVED : GameMoveStatus.PLAYER2_MOVED;
+        }
+
+        Board board = gameView.getGame().getBoard();
+        Piece proposedMoveSlotPiece = proposedMoveSlotPieceOptional.get();
+        Player pieceWinner = currentPlayerTurn == PlayerType.P1 ? board.getPlayer1() : board.getPlayer2();
+        Player pieceLoser = currentPlayerTurn == PlayerType.P1 ? board.getPlayer2() : board.getPlayer1();
+        log.info("{} captured {}'s piece = {}", pieceWinner.getPlayerType(), pieceLoser.getPlayerType(),
+            proposedMoveSlotPiece.getShortName());
+
+        pieceWinner.getCapturedPieces().add(proposedMoveSlotPiece);
+        pieceLoser.getRemovedPieces().add(proposedMoveSlotPiece);
+
+        if (proposedMoveSlotPiece.isMaster()) {
+            return currentPlayerTurn == PlayerType.P1 ?
+                GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_MASTER_PIECE_CAPTURE :
+                GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_MASTER_PIECE_CAPTURE;
+        } else {
+            if (proposedMovePosition.equals(opponentMasterHome)) {
+                return currentPlayerTurn == PlayerType.P1 ?
+                    GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE :
+                    GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE;
+            }
+            return currentPlayerTurn == PlayerType.P1 ? GameMoveStatus.PLAYER1_CAPTURED :
+                GameMoveStatus.PLAYER2_CAPTURED;
+        }
+    }
+
     private void updateCards(final PlayerType nextTurnPlayer, final Card prevTurnPlayerCard) {
-        Player p1 = boardSlotView.getGameView().getGame().getBoard().getPlayer1();
-        Player p2 = boardSlotView.getGameView().getGame().getBoard().getPlayer2();
+        Board board = gameView.getGame().getBoard();
+
+        Player p1 = board.getPlayer1();
+        Player p2 = board.getPlayer2();
 
         if (nextTurnPlayer == PlayerType.P2) {
             updatePlayerCards(p2, p1, prevTurnPlayerCard);
         } else {
             updatePlayerCards(p1, p2, prevTurnPlayerCard);
         }
-        boardSlotView.getGameView().updatePlayerCardViews();
+        gameView.updatePlayerCardViews();
     }
 
     private void updatePlayerCards(final Player nextTurnPlayer,

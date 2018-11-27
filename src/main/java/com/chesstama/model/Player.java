@@ -16,6 +16,7 @@ public class Player {
 
     private final List<Piece> pieces;
     private final List<Piece> removedPieces;
+    private final List<Piece> capturedPieces;
     private final List<Card> cards;
     private Card upcomingCard;
     private final PlayerType playerType;
@@ -23,6 +24,7 @@ public class Player {
     public Player(final List<Card> cards, final Card upcomingCard, final PlayerType playerType) {
         this.pieces = new ArrayList<>();
         this.removedPieces = new ArrayList<>();
+        this.capturedPieces = new ArrayList<>();
         this.cards = cards;
         this.upcomingCard = upcomingCard;
         this.playerType = playerType;
@@ -52,6 +54,10 @@ public class Player {
 
     public List<Piece> getRemovedPieces() {
         return removedPieces;
+    }
+
+    public List<Piece> getCapturedPieces() {
+        return capturedPieces;
     }
 
     public void removePiece(final Piece p) {

@@ -32,9 +32,10 @@ import java.util.Optional;
 @Slf4j
 public class GameView extends Application {
 
-    private static final String CHESS_TAMA = "Chess-Tama";
     private static final String STYLES_CSS = "styles.css";
+
     public static final String PLAYER_1_STR = "Player 1";
+    public static final String CHESS_TAMA = "Chess-Tama";
     public static final String PLAYER_2_STR = "Player 2";
     public static final String CURRENT_PLAYER_STR = "Current Player: ";
 
@@ -258,6 +259,10 @@ public class GameView extends Application {
         currentPlayerTurnLabel.setText(getCurrentPlayerTurnString());
     }
 
+    public void updateCurrentPlayerLabel(final String s) {
+        currentPlayerTurnLabel.setText(s);
+    }
+
     @Override
     public void start(final Stage stage) throws Exception {
         initCanvas();
@@ -276,5 +281,13 @@ public class GameView extends Application {
         stage.show();
 
         log.info("Stage Width = {}, Height = {}", stage.getWidth(), stage.getHeight());
+    }
+
+    public void disableAllHandlers() {
+        boardView.disableEventHandlers();
+
+        for (PlayerCardView playerCardView : allCards) {
+            playerCardView.disableEventHandlers();
+        }
     }
 }

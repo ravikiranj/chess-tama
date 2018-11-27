@@ -1,6 +1,7 @@
 package com.chesstama.view;
 
 import com.chesstama.handlers.BoardSlotViewClickHandler;
+import com.chesstama.handlers.NoOpClickHandler;
 import com.chesstama.model.Slot;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -70,6 +71,10 @@ public class BoardSlotView extends StackPane {
 
     private void setEventHandlers() {
         this.setOnMouseClicked(new BoardSlotViewClickHandler(this));
+    }
+
+    public void disableEventHandlers() {
+        this.setOnMouseClicked(new NoOpClickHandler());
     }
 
     @Override

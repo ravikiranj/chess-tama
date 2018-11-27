@@ -65,6 +65,14 @@ public class BoardView extends GridPane {
         }
     }
 
+    public void disableEventHandlers() {
+        for (int row = 1; row <= Board.MAX_ROWS; row++) {
+            for (int col = 1; col <= Board.MAX_COLS; col++) {
+                boardSlotViews[row][col].disableEventHandlers();
+            }
+        }
+    }
+
     public BoardSlotView getBoardSlotView(final Position p) {
         return boardSlotViews[p.getRow()][p.getCol()];
     }
