@@ -25,7 +25,6 @@ import java.util.Set;
 @Slf4j
 public class PlayerCardView extends VBox {
 
-    public static final String UP_ARROW_STRING = "   ↑   ";
     private PlayerType cardOfPlayer;
     private Card card;
     private CardSlot cardSlot;
@@ -43,31 +42,50 @@ public class PlayerCardView extends VBox {
         this.card = card;
         this.boardSlotViews = new BoardSlotView[Board.MAX_ROWS+1][Board.MAX_COLS+1];
 
-        Set<Position> validPositions = card != null ? card.getAbsoluteValidPositions() : Collections.emptySet();
-
+        Set<Position> validPositions = card != null ? card.getAbsoluteValidPositions(cardOfPlayer) :
+            Collections.emptySet();
         GridPane cardGridPane = new GridPane();
-        Label upLabel = new Label(UP_ARROW_STRING);
-        upLabel.getStyleClass().add(CSS.UP_ARROW_LABEL.getName());
-        GridPane.setConstraints(upLabel, Board.MASTER_COL, 0);
-        cardGridPane.getChildren().add(upLabel);
+
+        if (cardOfPlayer == PlayerType.P1) {
+            Label upArrowLabel = new Label(Card.UP_ARROW_STRING);
+            upArrowLabel.getStyleClass().add(CSS.ARROW_LABEL.getName());
+            upArrowLabel.getStyleClass().add(CSS.CARD_SQUARE.getName());
+            GridPane.setConstraints(upArrowLabel, Board.MASTER_COL, 0);
+            cardGridPane.getChildren().add(upArrowLabel);
+        }
 
         for (int row = 1; row <= Board.MAX_ROWS; row++) {
             for (int col = 1; col <= Board.MAX_COLS; col++) {
-                Position currentPosition = new Position(row, col);
+                int modRow = cardOfPlayer == PlayerType.P1 ? row : Board.MAX_ROWS - row + 1;
+                int modCol = cardOfPlayer == PlayerType.P1 ? col : Board.MAX_COLS - col + 1;
+                Position currentPosition = new Position(modRow, modCol);
 
-                BoardSlotView boardSlotView = new BoardSlotView(new Slot(row, col), gameView,
+                BoardSlotView boardSlotView = new BoardSlotView(new Slot(modRow, modCol), gameView,
                     EventHandlerConfig.DISABLED);
                 boardSlotView.getStyleClass().add(CSS.CARD_SQUARE.getName());
                 boardSlotView.getStyleClass().add(getCssClass(card, currentPosition, validPositions));
-                boardSlotViews[row][col] = boardSlotView;
+                boardSlotViews[modRow][modCol] = boardSlotView;
 
-                GridPane.setConstraints(boardSlotView, col, row);
+                GridPane.setConstraints(boardSlotView, modCol, modRow);
                 cardGridPane.getChildren().add(boardSlotView);
             }
         }
 
-        cardGridPane.getStyleClass().add(CSS.PLAYER_CARD.getName());
+        if (cardOfPlayer == PlayerType.P1) {
+            cardGridPane.getStyleClass().add(CSS.P1_PLAYER_CARD.getName());
+        } else {
+            cardGridPane.getStyleClass().add(CSS.P2_PLAYER_CARD.getName());
+        }
+
         this.getChildren().add(cardGridPane);
+
+        if (cardOfPlayer == PlayerType.P2) {
+            Label downArrowLabel = new Label(Card.DOWN_ARROW_STRING);
+            downArrowLabel.getStyleClass().add(CSS.ARROW_LABEL.getName());
+            downArrowLabel.getStyleClass().add(CSS.CARD_SQUARE.getName());
+            GridPane.setConstraints(downArrowLabel, Board.MASTER_COL, Board.MAX_ROWS + 1);
+            cardGridPane.getChildren().add(downArrowLabel);
+        }
 
         cardLabel = new Label(getCardLabelStr());
         GridPane.setConstraints(cardLabel, Board.MASTER_COL - 1, Board.MAX_ROWS);
@@ -88,14 +106,14 @@ public class PlayerCardView extends VBox {
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void updateView() {
-        Set<Position> validPositions = card != null ? card.getAbsoluteValidPositions() : Collections.emptySet();
+        Set<Position> validPositions = card != null ? card.getAbsoluteValidPositions(cardOfPlayer) :
+            Collections.emptySet();
 
         for (int row = 1; row <= Board.MAX_ROWS; row++) {
             for (int col = 1; col <= Board.MAX_COLS; col++) {
                 Position currentPosition = new Position(row, col);
                 BoardSlotView boardSlotView = boardSlotViews[row][col];
                 boardSlotView.getStyleClass().clear();
-                boardSlotView.getStyleClass().add(CSS.SQUARE.getName());
                 boardSlotView.getStyleClass().add(CSS.CARD_SQUARE.getName());
                 boardSlotView.getStyleClass().add(getCssClass(card, currentPosition, validPositions));
             }

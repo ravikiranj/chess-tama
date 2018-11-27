@@ -7,15 +7,14 @@ import com.chesstama.model.Player;
 import com.chesstama.model.Player.PlayerType;
 import com.chesstama.view.PlayerCardView.CardSlot;
 import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ import java.util.Optional;
  * @author ravikiranj
  * @since Sep 2017
  */
+@Slf4j
 public class GameView extends Application {
 
     private static final String CHESS_TAMA = "Chess-Tama";
@@ -76,6 +76,7 @@ public class GameView extends Application {
 
         // Outer HBox containing main game and move window
         outerHBox = new HBox();
+        outerHBox.getStyleClass().add(CSS.GAME_CONTAINER.getName());
         canvas.getChildren().add(outerHBox);
 
         initMainGameVBox();
@@ -263,21 +264,17 @@ public class GameView extends Application {
 
         Scene scene = new Scene(canvas);
 
-        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        int stageWidth = 900;
+        int stageHeight = 1000;
 
-        float heightFactor = 1.00f;
-        float widthFactor = 0.60f;
-
-        stage.setWidth(primaryScreenBounds.getWidth() * widthFactor);
-        stage.setMinWidth(primaryScreenBounds.getWidth() * widthFactor);
-
-        stage.setHeight(primaryScreenBounds.getHeight() * heightFactor);
-        stage.setMinHeight(primaryScreenBounds.getHeight() * heightFactor);
+        stage.setWidth(stageWidth);
+        stage.setHeight(stageHeight);
 
         stage.setTitle(CHESS_TAMA);
         stage.setScene(scene);
         scene.getStylesheets().add(STYLES_CSS);
         stage.show();
-        stage.sizeToScene();
+
+        log.info("Stage Width = {}, Height = {}", stage.getWidth(), stage.getHeight());
     }
 }

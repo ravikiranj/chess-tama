@@ -1,8 +1,9 @@
 package com.chesstama.view;
 
 public enum CSS {
+    GAME_CONTAINER("game-container"),
     GAMEROW("gamerow"),
-    SQUARE("square"),
+    BOARD_SQUARE("board-square"),
     CARD_SQUARE("card-square"),
     HIGHLIGHTED_CARD("highlighted-card"),
     HIGHLIGHTED_SQUARE("highlighted-square"),
@@ -10,12 +11,13 @@ public enum CSS {
     GREY_SQUARE("grey-square"),
     BLUE_SQUARE("blue-square"),
     RED_SQUARE("red-square"),
-    PLAYER_CARD("player-card"),
+    P1_PLAYER_CARD("p1-player-card"),
+    P2_PLAYER_CARD("p2-player-card"),
     PLAYER_CARD_HOLDER("player-card-holder"),
     GAMEBOARD("gameboard"),
     CURRENT_PLAYER_TURN("current-player-turn"),
     PLAYER_LABEL("player-label"),
-    UP_ARROW_LABEL("up-arrow-label");
+    ARROW_LABEL("arrow-label");
 
     private final String cssClassName;
 

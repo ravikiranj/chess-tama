@@ -41,7 +41,7 @@ public class BoardSlotView extends StackPane {
         this.isHighlighted = false;
 
         getChildren().addAll(slotLabel);
-        getStyleClass().add(CSS.SQUARE.getName());
+        getStyleClass().add(CSS.BOARD_SQUARE.getName());
 
         if (eventHandlerConfig == EventHandlerConfig.ENABLED) {
             setEventHandlers();

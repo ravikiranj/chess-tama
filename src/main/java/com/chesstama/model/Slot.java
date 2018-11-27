@@ -30,6 +30,12 @@ public class Slot {
 
     @Override
     public String toString() {
+        return piece.map(Piece::getShortName)
+                    .orElse("");
+    }
+
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private String getPrettyStringWithPos() {
         String pieceName = piece.map(Piece::getShortName)
                                 .orElse("");
 
