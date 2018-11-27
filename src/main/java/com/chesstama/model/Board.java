@@ -27,7 +27,7 @@ public class Board {
     private final Player p1;
     private final Player p2;
 
-    private final PlayerType currentPlayerTurn;
+    private PlayerType currentPlayerTurn;
 
     private Card selectedCard;
     private Optional<Piece> selectedPiece;
@@ -43,6 +43,16 @@ public class Board {
 
         initBoard();
 
+    }
+
+    public PlayerType togglePlayerTurn() {
+        if (currentPlayerTurn == PlayerType.P2) {
+            currentPlayerTurn = PlayerType.P1;
+        } else {
+            currentPlayerTurn = PlayerType.P2;
+        }
+
+        return currentPlayerTurn;
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")

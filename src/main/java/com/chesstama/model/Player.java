@@ -17,7 +17,7 @@ public class Player {
     private final List<Piece> pieces;
     private final List<Piece> removedPieces;
     private final List<Card> cards;
-    private final Card upcomingCard;
+    private Card upcomingCard;
     private final PlayerType playerType;
 
     public Player(final List<Card> cards, final Card upcomingCard, final PlayerType playerType) {
@@ -72,6 +72,10 @@ public class Player {
 
     public PlayerType getPlayerType() {
         return playerType;
+    }
+
+    public void setUpcomingCard(Card upcomingCard) {
+        this.upcomingCard = upcomingCard;
     }
 
     public enum PlayerType {

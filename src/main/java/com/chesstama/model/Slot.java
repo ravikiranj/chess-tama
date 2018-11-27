@@ -25,7 +25,7 @@ public class Slot {
     }
 
     public void setPiece(final Piece piece) {
-        this.piece = Optional.of(piece);
+        this.piece = Optional.ofNullable(piece);
     }
 
     @Override
@@ -47,5 +47,4 @@ public class Slot {
     public Position getPosition() {
         return position;
     }
-
 }

@@ -1,9 +1,12 @@
 package com.chesstama.view;
 
 import com.chesstama.model.Board;
+import com.chesstama.model.Piece;
 import com.chesstama.model.Position;
 import com.chesstama.model.Slot;
 import javafx.scene.layout.GridPane;
+
+import javax.annotation.Nullable;
 
 /**
  * BoardView
@@ -39,6 +42,15 @@ public class BoardView extends GridPane {
         this.getStyleClass().add(CSS.GAMEBOARD.getName());
     }
 
+    public void updateView() {
+        for (int row = 1; row <= Board.MAX_ROWS; row++) {
+            for (int col = 1; col <= Board.MAX_COLS; col++) {
+                boardSlotViews[row][col].updateView();
+            }
+        }
+
+    }
+
     @SuppressWarnings("PMD.MethodReturnsInternalArray")
     public BoardSlotView[][] getBoardSlotViews() {
         return boardSlotViews;
@@ -55,6 +67,11 @@ public class BoardView extends GridPane {
 
     public BoardSlotView getBoardSlotView(final Position p) {
         return boardSlotViews[p.getRow()][p.getCol()];
+    }
+
+    public void setBoardSlotView(final Position p, @Nullable final Piece piece) {
+        BoardSlotView boardSlotView = boardSlotViews[p.getRow()][p.getCol()];
+        boardSlotView.getSlot().setPiece(piece);
     }
 
     public GameView getGameView() {

@@ -12,7 +12,7 @@ import java.util.StringJoiner;
 public class Piece {
 
     protected final PieceType pieceType;
-    protected final Position position;
+    protected Position position;
     protected final Player player;
 
     public Piece(final PieceType pieceType, final Player player, final Position position) {
@@ -74,6 +74,10 @@ public class Piece {
             .add("player = " + player)
             .add("position = " + position)
             .toString();
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     enum PieceType {

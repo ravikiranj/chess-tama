@@ -3,6 +3,7 @@ package com.chesstama.model;
 import com.chesstama.util.GameUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +23,16 @@ public class Game {
         log.info("Initalizing Game");
         List<Card> cardsForGame = GameUtil.getRandomSubList(Card.ALL_CARDS, NUM_GAME_CARDS);
 
-        Player p1 = new Player(cardsForGame.subList(0, 2), cardsForGame.get(2), Player.PlayerType.P1);
-        Player p2 = new Player(cardsForGame.subList(3, 5), null, Player.PlayerType.P2);
+        List<Card> p1Cards = new ArrayList<>();
+        p1Cards.add(cardsForGame.get(0));
+        p1Cards.add(cardsForGame.get(1));
+
+        List<Card> p2Cards = new ArrayList<>();
+        p2Cards.add(cardsForGame.get(3));
+        p2Cards.add(cardsForGame.get(4));
+
+        Player p1 = new Player(p1Cards, cardsForGame.get(2), Player.PlayerType.P1);
+        Player p2 = new Player(p2Cards, null, Player.PlayerType.P2);
 
         this.board = new Board(p1, p2);
         log.info("Initalizing Game Complete");

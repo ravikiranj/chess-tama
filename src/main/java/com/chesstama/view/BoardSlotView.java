@@ -2,6 +2,7 @@ package com.chesstama.view;
 
 import com.chesstama.model.Card;
 import com.chesstama.model.Piece;
+import com.chesstama.model.Player;
 import com.chesstama.model.Player.PlayerType;
 import com.chesstama.model.Position;
 import com.chesstama.model.Slot;
@@ -11,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,6 +46,10 @@ public class BoardSlotView extends StackPane {
         if (eventHandlerConfig == EventHandlerConfig.ENABLED) {
             setEventHandlers();
         }
+    }
+
+    public void updateView() {
+        this.slotLabel.setText(slot.toString());
     }
 
     public Slot getSlot() {
@@ -134,6 +140,50 @@ public class BoardSlotView extends StackPane {
             // update main card
             // update next cards
             log.info("Valid move, need to handle logic");
+
+            // Change piece position
+            currentSelectedPiece.setPosition(proposedMovePosition);
+
+            // Change board slots
+            boardSlotView.gameView.getBoardView().setBoardSlotView(currentSelectedPiecePosition, null);
+            boardSlotView.gameView.getBoardView().setBoardSlotView(proposedMovePosition, currentSelectedPiece);
+
+            // Update board view
+            this.boardSlotView.gameView.getGame().getBoard().setSelectedPiece(Optional.ofNullable(null));
+            boardSlotView.gameView.getBoardView().updateView();
+            boardSlotView.gameView.getBoardView().clearAllBoardSlotViews();
+
+            // Missing capture logic
+
+            // Update player turn
+            PlayerType nextPlayerTurn = boardSlotView.gameView.getGame().getBoard().togglePlayerTurn();
+
+            // Update main and upcoming cards
+            updateCards(nextPlayerTurn, currentSelectedCard);
+        }
+
+        private void updateCards(PlayerType nextTurnPlayer, Card prevTurnPlayerCard) {
+            Player p1 = boardSlotView.gameView.getGame().getBoard().getPlayer1();
+            Player p2 = boardSlotView.gameView.getGame().getBoard().getPlayer2();
+
+            if (nextTurnPlayer == PlayerType.P2) {
+                updatePlayerCards(p2, p1, prevTurnPlayerCard);
+            } else {
+                updatePlayerCards(p1, p2, prevTurnPlayerCard);
+            }
+            boardSlotView.getGameView().updatePlayerCardViews();
+        }
+
+        private void updatePlayerCards(Player nextTurnPlayer, Player previousTurnPlayer, Card prevTurnPlayedCard) {
+            log.info("nextTurnPlayer = {}, previousTurnPlayer = {}, prevTurnPlayerCard = {}",
+                nextTurnPlayer, previousTurnPlayer, prevTurnPlayedCard);
+            List<Card> previousTurnPlayerCards = previousTurnPlayer.getCards();
+            log.info("Previous Player cards = {}", previousTurnPlayerCards);
+            previousTurnPlayerCards.remove(prevTurnPlayedCard);
+            previousTurnPlayerCards.add(previousTurnPlayer.getUpcomingCard());
+            previousTurnPlayer.setUpcomingCard(null);
+
+            nextTurnPlayer.setUpcomingCard(prevTurnPlayedCard);
         }
     }
 
