@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,84 +21,234 @@ import static com.chesstama.model.Card.CardColor.RED;
  */
 @Slf4j
 public enum Card {
+    /*
+    (top, left)     = (1, 1)
+    (top, right)    = (1, 5)
+    (bottom, left)  = (5, 1)
+    (bottom, right) = (5, 5)
+
+               ↑
+         .  .  .  .  .
+         X  .  .  .  X
+         .  .  M  .  .
+         .  X  .  X  .
+         .  .  .  .  .
+
+     */
     DRAGON(RED, ImmutableSet.of(
-        new Position(1, -2),
-        new Position(1, 2),
+        new Position(-1, -2),
+        new Position(-1, 2),
+        new Position(1, -1),
+        new Position(1, 1)
+    )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  .  X  .  .
+         .  X  M  X  .
+         .  .  .  .  .
+         .  .  .  .  .
+     */
+    BOAR(RED, ImmutableSet.of(
+        new Position(0, -1),
+        new Position(0, 1),
+        new Position(-1, 0)
+    )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  X  .  X  .
+         .  .  M  .  .
+         .  .  X  .  .
+         .  .  .  .  .
+
+     */
+    MANTIS(RED, ImmutableSet.of(
+        new Position(1, 0),
         new Position(-1, -1),
         new Position(-1, 1)
     )),
-    BOAR(RED, ImmutableSet.of(
-        new Position(1, 0),
-        new Position(0, -1),
-        new Position(0, 1)
-    )),
-    MANTIS(RED, ImmutableSet.of(
-        new Position(1, -1),
-        new Position(1, 1),
-        new Position(-1, 0)
-    )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  X  .  X  .
+         .  X  M  X  .
+         .  .  .  .  .
+         .  .  .  .  .
+     */
     ELEPHANT(RED, ImmutableSet.of(
         new Position(0, -1),
         new Position(0, 1),
-        new Position(1, -1),
-        new Position(1, 1)
+        new Position(-1, -1),
+        new Position(-1, 1)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  .  .  X  .
+         .  X  M  X  .
+         .  X  .  .  .
+         .  .  .  .  .
+     */
     ROOSTER(RED, ImmutableSet.of(
         new Position(0, -1),
         new Position(0, 1),
-        new Position(-1, -1),
-        new Position(1, 1)
+        new Position(-1, 1),
+        new Position(1, -1)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  .  .  X  .
+         .  X  M  .  .
+         .  .  .  X  .
+         .  .  .  .  .
+     */
     COBRA(RED, ImmutableSet.of(
         new Position(1, 1),
         new Position(-1, 1),
         new Position(0, -1)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  .  X  .  .
+         .  .  M  X  .
+         .  .  X  .  .
+         .  .  .  .  .
+     */
     OX(RED, ImmutableSet.of(
         new Position(1, 0),
         new Position(-1, 0),
         new Position(0, 1)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  .  .  X  .
+         .  .  M  .  X
+         .  X  .  .  .
+         .  .  .  .  .
+     */
     RABBIT(RED, ImmutableSet.of(
-        new Position(1, 1),
+        new Position(1, -1),
         new Position(0, 2),
-        new Position(-1, -1)
+        new Position(-1, 1)
     )),
+
+    /*
+               ↑
+         .  .  X  .  .
+         .  .  .  .  .
+         .  .  M  .  .
+         .  .  X  .  .
+         .  .  .  .  .
+     */
     TIGER(BLUE, ImmutableSet.of(
-        new Position(2, 0),
-        new Position(-1, 0)
+        new Position(-2, 0),
+        new Position(1, 0)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  .  X  .  .
+         X  .  M  .  X
+         .  .  .  .  .
+         .  .  .  .  .
+     */
     CRAB(BLUE, ImmutableSet.of(
-        new Position(1, 0),
+        new Position(-1, 0),
         new Position(0, -2),
         new Position(0, 2)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  X  .  .  .
+         .  X  M  X  .
+         .  .  .  X  .
+         .  .  .  .  .
+     */
     GOOSE(BLUE, ImmutableSet.of(
         new Position(0, -1),
         new Position(0, 1),
-        new Position(1, -1),
-        new Position(-1, 1)
+        new Position(1, 1),
+        new Position(-1, -1)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  .  X  .  .
+         .  .  M  .  .
+         .  X  .  X  .
+         .  .  .  .  .
+     */
     CRANE(BLUE, ImmutableSet.of(
-        new Position(1, 0),
-        new Position(-1, -1),
-        new Position(-1, 1)
+        new Position(-1, 0),
+        new Position(1, -1),
+        new Position(1, 1)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  .  X  .  .
+         .  X  M  .  .
+         .  .  X  .  .
+         .  .  .  .  .
+     */
     HORSE(BLUE, ImmutableSet.of(
         new Position(1, 0),
         new Position(0, -1),
         new Position(-1, 0)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  X  .  .  .
+         .  .  M  X  .
+         .  X  .  .  .
+         .  .  .  .  .
+     */
     EEL(BLUE, ImmutableSet.of(
         new Position(1, -1),
         new Position(0, 1),
         new Position(-1, -1)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  X  .  .  .
+         X  .  M  .  .
+         .  .  .  X  .
+         .  .  .  .  .
+     */
     FROG(BLUE, ImmutableSet.of(
-        new Position(1, -1),
+        new Position(-1, -1),
         new Position(0, -2),
-        new Position(-1, 1)
+        new Position(1, 1)
     )),
+
+    /*
+               ↑
+         .  .  .  .  .
+         .  X  .  X  .
+         .  .  M  .  .
+         .  X  .  X  .
+         .  .  .  .  .
+     */
     MONKEY(BLUE, ImmutableSet.of(
         new Position(1, -1),
         new Position(1, 1),
@@ -115,7 +266,7 @@ public enum Card {
 
     Card(final CardColor cardColor, final Set<Position> validPositions) {
         this.cardColor = cardColor;
-        this.validPositions = validPositions;
+        this.validPositions = Collections.unmodifiableSet(validPositions);
     }
 
     public CardColor getCardColor() {
@@ -160,7 +311,7 @@ public enum Card {
                     System.out.print(" X ");
                     continue;
                 }
-                System.out.print(" O ");
+                System.out.print(" . ");
             }
             System.out.println();
         }
@@ -185,7 +336,7 @@ public enum Card {
                     values[modRow][modCol] = " X ";
                     continue;
                 }
-                values[modRow][modCol] = " O ";
+                values[modRow][modCol] = " . ";
             }
         }
 
