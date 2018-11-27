@@ -57,3 +57,19 @@
 .player-card-holder {
     -fx-alignment: center;
 }
+
+.current-player-turn {
+  -fx-font-size: 15px;
+  -fx-font-style: italic;
+}
+
+.player-label {
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+}
+
+.up-arrow-label {
+  -fx-font-size: 20px;
+  -fx-text-alignment: center;
+  -fx-alignment: center;
+}

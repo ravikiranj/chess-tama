@@ -25,6 +25,7 @@ import java.util.Set;
 @Slf4j
 public class PlayerCardView extends VBox {
 
+    public static final String UP_ARROW_STRING = "   ↑   ";
     private PlayerType cardOfPlayer;
     private Card card;
     private CardSlot cardSlot;
@@ -45,6 +46,11 @@ public class PlayerCardView extends VBox {
         Set<Position> validPositions = card != null ? card.getAbsoluteValidPositions() : Collections.emptySet();
 
         GridPane cardGridPane = new GridPane();
+        Label upLabel = new Label(UP_ARROW_STRING);
+        upLabel.getStyleClass().add(CSS.UP_ARROW_LABEL.getName());
+        GridPane.setConstraints(upLabel, Board.MASTER_COL, 0);
+        cardGridPane.getChildren().add(upLabel);
+
         for (int row = 1; row <= Board.MAX_ROWS; row++) {
             for (int col = 1; col <= Board.MAX_COLS; col++) {
                 Position currentPosition = new Position(row, col);
@@ -55,7 +61,7 @@ public class PlayerCardView extends VBox {
                 boardSlotView.getStyleClass().add(getCssClass(card, currentPosition, validPositions));
                 boardSlotViews[row][col] = boardSlotView;
 
-                GridPane.setConstraints(boardSlotView, col - 1, row - 1);
+                GridPane.setConstraints(boardSlotView, col, row);
                 cardGridPane.getChildren().add(boardSlotView);
             }
         }
@@ -76,10 +82,11 @@ public class PlayerCardView extends VBox {
         return card != null ? card.name() : "";
     }
 
-    public void updateCard(Card card) {
+    public void updateCard(final Card card) {
         this.card = card;
     }
 
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void updateView() {
         Set<Position> validPositions = card != null ? card.getAbsoluteValidPositions() : Collections.emptySet();
 

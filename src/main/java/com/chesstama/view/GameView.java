@@ -6,10 +6,10 @@ import com.chesstama.model.Piece;
 import com.chesstama.model.Player;
 import com.chesstama.model.Player.PlayerType;
 import com.chesstama.view.PlayerCardView.CardSlot;
-import com.google.common.collect.ImmutableList;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -25,6 +25,8 @@ import java.util.Optional;
 /**
  * GameView
  *
+ * TODO: Refactor to ensure X-View contains X-Model only (example: GameView has Game model, BoardView has Board model)
+ *
  * @author ravikiranj
  * @since Sep 2017
  */
@@ -32,6 +34,9 @@ public class GameView extends Application {
 
     private static final String CHESS_TAMA = "Chess-Tama";
     private static final String STYLES_CSS = "styles.css";
+    public static final String PLAYER_1_STR = "Player 1";
+    public static final String PLAYER_2_STR = "Player 2";
+    public static final String CURRENT_PLAYER_STR = "Current Player: ";
 
     private final Game game;
 
@@ -54,6 +59,9 @@ public class GameView extends Application {
     private GridPane topRowGridPane;
     private GridPane middleRowGridPane;
     private GridPane bottomRowGridPane;
+    private GridPane currentPlayerTurnGridPane;
+
+    private Label currentPlayerTurnLabel;
 
     public GameView() {
         super();
@@ -85,9 +93,42 @@ public class GameView extends Application {
         mainGameVBox = new VBox();
         outerHBox.getChildren().add(mainGameVBox);
 
+        initCurrentPlayerTurnGridPane();
+        initPlayerLabel(PlayerType.P2);
         initTopRowGridPane();
         initMiddleRowGridPane();
         initBottomRowGridPane();
+        initPlayerLabel(PlayerType.P1);
+    }
+
+    private void initPlayerLabel(final PlayerType playerType) {
+        GridPane gridPane = new GridPane();
+        mainGameVBox.getChildren().add(gridPane);
+
+        Label playerLabel = new Label(playerType == PlayerType.P1 ? PLAYER_1_STR : PLAYER_2_STR);
+        playerLabel.getStyleClass().add(CSS.PLAYER_LABEL.getName());
+
+        gridPane.getStyleClass().add(CSS.GAMEROW.getName());
+        GridPane.setConstraints(playerLabel, 0, 0);
+        gridPane.getChildren().add(playerLabel);
+    }
+
+    private void initCurrentPlayerTurnGridPane() {
+        currentPlayerTurnGridPane = new GridPane();
+        currentPlayerTurnGridPane.getStyleClass().add(CSS.GAMEROW.getName());
+        mainGameVBox.getChildren().add(currentPlayerTurnGridPane);
+
+        currentPlayerTurnLabel = new Label(getCurrentPlayerTurnString());
+        currentPlayerTurnLabel.getStyleClass().add(CSS.CURRENT_PLAYER_TURN.getName());
+        GridPane.setConstraints(currentPlayerTurnLabel, 0, 0);
+        currentPlayerTurnGridPane.getChildren().add(currentPlayerTurnLabel);
+    }
+
+    private String getCurrentPlayerTurnString() {
+        StringBuilder stringBuilder = new StringBuilder(CURRENT_PLAYER_STR);
+        stringBuilder.append(game.getBoard().getCurrentPlayerTurn() == PlayerType.P1 ? PLAYER_1_STR : PLAYER_2_STR);
+
+        return stringBuilder.toString();
     }
 
     private void initBottomRowGridPane() {
@@ -212,6 +253,10 @@ public class GameView extends Application {
         return game.getBoard().getCurrentPlayerTurn();
     }
 
+    public void updateCurrentPlayerLabel() {
+        currentPlayerTurnLabel.setText(getCurrentPlayerTurnString());
+    }
+
     @Override
     public void start(final Stage stage) throws Exception {
         initCanvas();
@@ -219,13 +264,20 @@ public class GameView extends Application {
         Scene scene = new Scene(canvas);
 
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setWidth(primaryScreenBounds.getWidth() * 0.75);
-        stage.setHeight(primaryScreenBounds.getHeight() * 0.75);
+
+        float heightFactor = 1.00f;
+        float widthFactor = 0.60f;
+
+        stage.setWidth(primaryScreenBounds.getWidth() * widthFactor);
+        stage.setMinWidth(primaryScreenBounds.getWidth() * widthFactor);
+
+        stage.setHeight(primaryScreenBounds.getHeight() * heightFactor);
+        stage.setMinHeight(primaryScreenBounds.getHeight() * heightFactor);
 
         stage.setTitle(CHESS_TAMA);
         stage.setScene(scene);
         scene.getStylesheets().add(STYLES_CSS);
-        stage.sizeToScene();
         stage.show();
+        stage.sizeToScene();
     }
 }

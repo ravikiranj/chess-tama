@@ -76,7 +76,7 @@ public class Piece {
             .toString();
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(final Position position) {
         this.position = position;
     }
 

@@ -74,7 +74,7 @@ public class Player {
         return playerType;
     }
 
-    public void setUpcomingCard(Card upcomingCard) {
+    public void setUpcomingCard(final Card upcomingCard) {
         this.upcomingCard = upcomingCard;
     }
 

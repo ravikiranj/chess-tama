@@ -130,17 +130,6 @@ public class BoardSlotView extends StackPane {
                 return;
             }
 
-            // Move pawn to new space
-            // check if new space has opponent pawns - run capture logic
-                // capture logic
-                //  (a) Check  opponent master, if yes, declare winner
-                //  (b) Add student to removed pieces list
-            // Clean old space
-            // update player turn
-            // update main card
-            // update next cards
-            log.info("Valid move, need to handle logic");
-
             // Change piece position
             currentSelectedPiece.setPosition(proposedMovePosition);
 
@@ -153,16 +142,21 @@ public class BoardSlotView extends StackPane {
             boardSlotView.gameView.getBoardView().updateView();
             boardSlotView.gameView.getBoardView().clearAllBoardSlotViews();
 
-            // Missing capture logic
+            // TODO: capture logic
+            // check if new space has opponent pawns - run capture logic
+                // capture logic
+                //  (a) Check  opponent master, if yes, declare winner
+                //  (b) Add student to removed pieces list
 
             // Update player turn
             PlayerType nextPlayerTurn = boardSlotView.gameView.getGame().getBoard().togglePlayerTurn();
+            boardSlotView.gameView.updateCurrentPlayerLabel();
 
             // Update main and upcoming cards
             updateCards(nextPlayerTurn, currentSelectedCard);
         }
 
-        private void updateCards(PlayerType nextTurnPlayer, Card prevTurnPlayerCard) {
+        private void updateCards(final PlayerType nextTurnPlayer, final Card prevTurnPlayerCard) {
             Player p1 = boardSlotView.gameView.getGame().getBoard().getPlayer1();
             Player p2 = boardSlotView.gameView.getGame().getBoard().getPlayer2();
 
@@ -174,7 +168,9 @@ public class BoardSlotView extends StackPane {
             boardSlotView.getGameView().updatePlayerCardViews();
         }
 
-        private void updatePlayerCards(Player nextTurnPlayer, Player previousTurnPlayer, Card prevTurnPlayedCard) {
+        private void updatePlayerCards(final Player nextTurnPlayer,
+                                       final Player previousTurnPlayer,
+                                       final Card prevTurnPlayedCard) {
             log.info("nextTurnPlayer = {}, previousTurnPlayer = {}, prevTurnPlayerCard = {}",
                 nextTurnPlayer, previousTurnPlayer, prevTurnPlayedCard);
             List<Card> previousTurnPlayerCards = previousTurnPlayer.getCards();

@@ -12,7 +12,10 @@ public enum CSS {
     RED_SQUARE("red-square"),
     PLAYER_CARD("player-card"),
     PLAYER_CARD_HOLDER("player-card-holder"),
-    GAMEBOARD("gameboard");
+    GAMEBOARD("gameboard"),
+    CURRENT_PLAYER_TURN("current-player-turn"),
+    PLAYER_LABEL("player-label"),
+    UP_ARROW_LABEL("up-arrow-label");
 
     private final String cssClassName;
 
