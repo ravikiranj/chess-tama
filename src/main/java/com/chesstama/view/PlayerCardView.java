@@ -1,16 +1,14 @@
 package com.chesstama.view;
 
+import com.chesstama.handlers.PlayerCardViewClickHandler;
 import com.chesstama.model.Board;
 import com.chesstama.model.Card;
 import com.chesstama.model.Card.CardColor;
-import com.chesstama.model.Piece;
 import com.chesstama.model.Player.PlayerType;
 import com.chesstama.model.Position;
 import com.chesstama.model.Slot;
-import com.chesstama.util.GameUtil;
 import com.chesstama.view.BoardSlotView.EventHandlerConfig;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
@@ -100,6 +98,20 @@ public class PlayerCardView extends VBox {
         return card != null ? card.name() : "";
     }
 
+    public PlayerType getCardOfPlayer() {
+        return cardOfPlayer;
+    }
+
+
+    public CardSlot getCardSlot() {
+        return cardSlot;
+    }
+
+
+    public GameView getGameView() {
+        return gameView;
+    }
+
     public void updateCard(final Card card) {
         this.card = card;
     }
@@ -132,49 +144,6 @@ public class PlayerCardView extends VBox {
             "cardOfPlayer=" + cardOfPlayer +
             ", card=" + card +
             '}';
-    }
-
-    @Slf4j
-    private static class PlayerCardViewClickHandler implements javafx.event.EventHandler<MouseEvent> {
-        private final PlayerCardView playerCardView;
-
-        public PlayerCardViewClickHandler(final PlayerCardView playerCardView) {
-            this.playerCardView = playerCardView;
-        }
-
-        @Override
-        public void handle(final MouseEvent event) {
-            if (this.playerCardView.card == null) {
-                return;
-            }
-
-            GameView gameView = this.playerCardView.gameView;
-            PlayerType currPlayerTurn = gameView.getCurrentPlayerTurn();
-
-            if (currPlayerTurn != this.playerCardView.cardOfPlayer ||
-                this.playerCardView.cardSlot != CardSlot.MAIN) {
-                log.info("Player Card isn't main or not of current player type, playerCardView = {} ", playerCardView);
-                return;
-            }
-
-            gameView.unselectAllPlayerCards();
-            gameView.getBoardView().clearAllBoardSlotViews();
-            gameView.updateSelectedCard(this.playerCardView.card);
-            this.playerCardView.selectCard();
-            if (this.playerCardView.gameView.getCurrentSelectedPiece().isPresent()) {
-                updateValidPositions();
-            }
-            log.info("PlayerCardView clicked = {}", this.playerCardView);
-        }
-
-        private void updateValidPositions() {
-            Piece currentSelectedPiece = this.playerCardView.gameView.getCurrentSelectedPiece().get();
-            BoardSlotView boardSlotView = this.playerCardView.gameView
-                .getBoardView().getBoardSlotView(currentSelectedPiece.getPosition());
-            boardSlotView.highlightSlot();
-            boardSlotView.highlightPieceSlot();
-            GameUtil.highlightValidMoves(boardSlotView, boardSlotView.getGameView());
-        }
     }
 
     public void selectCard() {
