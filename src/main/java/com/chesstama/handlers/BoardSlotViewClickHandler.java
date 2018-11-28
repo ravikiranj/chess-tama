@@ -84,7 +84,7 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
         }
 
         // Capture Logic
-        GameMoveStatus gameMoveStatus = runCaptureLogic(currentPlayerTurn, proposedMovePosition);
+        GameMoveStatus gameMoveStatus = runCaptureLogic(currentSelectedPiece, currentPlayerTurn, proposedMovePosition);
         log.info("Player Turn = {}, GameMoveStatus = {}", currentPlayerTurn, gameMoveStatus);
 
         // Change piece position
@@ -128,7 +128,8 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
         gameEndAlert.showAndWait();
     }
 
-    private GameMoveStatus runCaptureLogic(final PlayerType currentPlayerTurn,
+    private GameMoveStatus runCaptureLogic(final Piece currentPlayerPiece,
+                                           final PlayerType currentPlayerTurn,
                                            final Position proposedMovePosition) {
         BoardView boardView = gameView.getBoardView();
 
@@ -138,7 +139,7 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
             new Position(Board.MIN_ROWS, Board.MASTER_COL) : new Position(Board.MAX_ROWS, Board.MASTER_COL);
 
         if (!proposedMoveSlotPieceOptional.isPresent()) {
-            if (proposedMovePosition.equals(opponentMasterHome)) {
+            if (currentPlayerPiece.isMaster() && proposedMovePosition.equals(opponentMasterHome)) {
                 return currentPlayerTurn == PlayerType.P1 ?
                     GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE :
                     GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE;
@@ -161,7 +162,7 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
                 GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_MASTER_PIECE_CAPTURE :
                 GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_MASTER_PIECE_CAPTURE;
         } else {
-            if (proposedMovePosition.equals(opponentMasterHome)) {
+            if (currentPlayerPiece.isMaster() && proposedMovePosition.equals(opponentMasterHome)) {
                 return currentPlayerTurn == PlayerType.P1 ?
                     GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE :
                     GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE;
