@@ -19,6 +19,13 @@ public class Position {
         this.col = col;
     }
 
+    /**
+     * @return true if either row or col is even but not both
+     */
+    public boolean isEvenPosition() {
+        return (row % 2 == 0 || col % 2 == 0) && !(row % 2 == 0 && col % 2 == 0);
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(col, row);

@@ -3,7 +3,7 @@ package com.chesstama.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.chesstama.model.Board.MASTER_COL;
+import static com.chesstama.model.Board.KING_COL;
 import static com.chesstama.model.Player.PlayerType.P1;
 
 /**
@@ -35,16 +35,16 @@ public class Player {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void initPieces() {
         int row = playerType == P1 ? Board.MAX_ROWS : Board.MIN_ROWS;
-        // Add master
-        this.pieces.add(new Master(this, new Position(row, MASTER_COL)));
+        // Add king
+        this.pieces.add(new King(this, new Position(row, KING_COL)));
 
-        // Add students
+        // Add pawns
         for (int j = Board.MIN_COLS; j <= Board.MAX_COLS; j++) {
-            if (j == MASTER_COL) {
+            if (j == KING_COL) {
                 continue;
             }
 
-            this.pieces.add(new Student(this, new Position(row, j)));
+            this.pieces.add(new Pawn(this, new Position(row, j)));
         }
     }
 

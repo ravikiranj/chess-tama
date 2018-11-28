@@ -21,8 +21,8 @@ public class Piece {
         this.position = position;
     }
 
-    public boolean isMaster() {
-        return this.pieceType == PieceType.MASTER;
+    public boolean isKing() {
+        return this.pieceType == PieceType.KING;
     }
 
     public String name() {
@@ -81,8 +81,8 @@ public class Piece {
     }
 
     enum PieceType {
-        MASTER("Master", "M"),
-        STUDENT("Student", "S");
+        KING("King", "K"),
+        PAWN("Pawn", "P");
 
         private final String name;
         private final String shortName;

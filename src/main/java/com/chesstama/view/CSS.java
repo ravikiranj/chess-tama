@@ -8,6 +8,7 @@ public enum CSS {
     HIGHLIGHTED_CARD("highlighted-card"),
     HIGHLIGHTED_SQUARE("highlighted-square"),
     HIGHLIGHTED_PIECE_SQUARE("highlighted-piece-square"),
+    EMPTY_SQUARE("empty-square"),
     GREY_SQUARE("grey-square"),
     BLUE_SQUARE("blue-square"),
     RED_SQUARE("red-square"),
@@ -17,7 +18,10 @@ public enum CSS {
     GAMEBOARD("gameboard"),
     CURRENT_PLAYER_TURN("current-player-turn"),
     PLAYER_LABEL("player-label"),
-    ARROW_LABEL("arrow-label");
+    ARROW_LABEL("arrow-label"),
+    BOARD_SLOT("board-slot"),
+    EVEN_BOARD_SLOT("even-board-slot"),
+    ODD_BOARD_SLOT("odd-board-slot");
 
     private final String cssClassName;
 

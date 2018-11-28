@@ -18,10 +18,10 @@ public class Board {
     public static final int MAX_ROWS = 5;
     public static final int MIN_COLS = 1;
     public static final int MAX_COLS = 5;
-    public static final int MASTER_COL = 3;
-    public static final int MASTER_ROW = 3;
+    public static final int KING_COL = 3;
+    public static final int KING_ROW = 3;
 
-    public static final Position MASTER_POSITION = new Position(MASTER_ROW, MASTER_COL);
+    public static final Position KING_POSITION = new Position(KING_ROW, KING_COL);
 
     private final Slot[][] gameBoard;
     private final Player p1;

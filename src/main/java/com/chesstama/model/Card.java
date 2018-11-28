@@ -281,8 +281,8 @@ public enum Card {
         return validPositions.stream()
                              .map(p -> {
                                  int modifier = playerType == PlayerType.P1 ? 1 : -1;
-                                 int absoluteRow = p.getRow() * modifier + Board.MASTER_ROW;
-                                 int absoluteCol = p.getCol() * modifier + Board.MASTER_COL;
+                                 int absoluteRow = p.getRow() * modifier + Board.KING_ROW;
+                                 int absoluteCol = p.getCol() * modifier + Board.KING_COL;
                                  return new Position(absoluteRow, absoluteCol);
                              })
                              .collect(Collectors.toSet());
@@ -293,7 +293,7 @@ public enum Card {
         log.info("Player 1");
         Set<Position> absolutePositions = getAbsoluteValidPositions(PlayerType.P1);
         for (int col = 1; col <= Board.MAX_COLS; col++) {
-            if (col == Board.MASTER_COL) {
+            if (col == Board.KING_COL) {
                 System.out.print(EMPTY_SPACE_V2 + UP_ARROW_STRING + EMPTY_SPACE_V2);
             } else {
                 System.out.print(EMPTY_SPACE_V1);
@@ -303,7 +303,7 @@ public enum Card {
         for (int row = 1; row <= Board.MAX_ROWS; row++) {
             for (int col = 1; col <= Board.MAX_COLS; col++) {
                 Position currentPosition = new Position(row, col);
-                if (currentPosition.equals(Board.MASTER_POSITION)) {
+                if (currentPosition.equals(Board.KING_POSITION)) {
                     System.out.print(" M ");
                     continue;
                 }
@@ -328,7 +328,7 @@ public enum Card {
                 int modRow = Board.MAX_ROWS - row + 1;
                 int modCol = Board.MAX_COLS - col + 1;
                 Position currentPosition = new Position(modRow, modCol);
-                if (currentPosition.equals(Board.MASTER_POSITION)) {
+                if (currentPosition.equals(Board.KING_POSITION)) {
                     values[modRow][modCol] = " M ";
                     continue;
                 }
@@ -347,7 +347,7 @@ public enum Card {
             System.out.println();
         }
         for (int col = 1; col <= Board.MAX_COLS; col++) {
-            if (col == Board.MASTER_COL) {
+            if (col == Board.KING_COL) {
                 System.out.print(EMPTY_SPACE_V2 + DOWN_ARROW_STRING + EMPTY_SPACE_V2);
             } else {
                 System.out.print(EMPTY_SPACE_V1);

@@ -2,9 +2,16 @@ package com.chesstama.view;
 
 import com.chesstama.handlers.BoardSlotViewClickHandler;
 import com.chesstama.handlers.NoOpClickHandler;
+import com.chesstama.model.Piece;
+import com.chesstama.model.Player;
 import com.chesstama.model.Slot;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
 
 /**
  * BoardSlotView
@@ -12,35 +19,80 @@ import javafx.scene.layout.StackPane;
  * @author rjanardhana
  * @since Oct 2017
  */
+@Slf4j
 public class BoardSlotView extends StackPane {
+
+    private static final String IMAGES_P1_KING_PNG = "images/P1-King.png";
+    private static final String IMAGES_P2_KING_PNG = "images/P2-King.png";
+    private static final String IMAGES_P2_PAWN_PNG = "images/P2-Pawn.png";
+    private static final String IMAGES_P1_PAWN_PNG = "images/P1-Pawn.png";
+    private static final String IMAGES_EMPTY_PNG = "images/Empty.png";
 
     private final Slot slot;
     private final GameView gameView;
     private final Label slotLabel;
+    private final boolean isEvenSlotPosition;
     private boolean isHighlighted;
 
     public BoardSlotView(final Slot slot, final GameView gameView) {
-        this(slot, gameView, EventHandlerConfig.ENABLED);
+        this(slot, gameView, BoardSlotType.GAME_BOARD_SLOT);
     }
 
-    public BoardSlotView(final Slot slot, final GameView gameView, final EventHandlerConfig eventHandlerConfig) {
+    public BoardSlotView(final Slot slot,
+                         final GameView gameView,
+                         final BoardSlotType boardSlotType) {
         super();
 
         this.slot = slot;
+        this.isEvenSlotPosition = slot.getPosition().isEvenPosition();
         this.gameView = gameView;
-        this.slotLabel = new Label(slot.toString());
+        this.slotLabel = new Label();
         this.isHighlighted = false;
 
         getChildren().addAll(slotLabel);
         getStyleClass().add(CSS.BOARD_SQUARE.getName());
 
-        if (eventHandlerConfig == EventHandlerConfig.ENABLED) {
+        if (boardSlotType == BoardSlotType.GAME_BOARD_SLOT) {
+            setSlotLabelGraphic();
             setEventHandlers();
         }
     }
 
+    private ImageView getBackgroundImage() {
+        Optional<Piece> pieceOptional = slot.getPiece();
+
+        if (!pieceOptional.isPresent()) {
+            return new ImageView(new Image(IMAGES_EMPTY_PNG));
+        }
+
+        Piece piece = pieceOptional.get();
+        String imagePath;
+        if (piece.getPlayer().getPlayerType() == Player.PlayerType.P1) {
+            imagePath = piece.isKing() ? IMAGES_P1_KING_PNG : IMAGES_P1_PAWN_PNG;
+        } else {
+            imagePath = piece.isKing() ? IMAGES_P2_KING_PNG: IMAGES_P2_PAWN_PNG;
+        }
+
+        log.info("Image path = {}", imagePath);
+
+        return new ImageView(new Image(imagePath));
+    }
+
     public void updateView() {
-        this.slotLabel.setText(slot.toString());
+        setSlotLabelGraphic();
+    }
+
+    private void setSlotLabelGraphic() {
+        slotLabel.getStyleClass().clear();
+
+        slotLabel.getStyleClass().add(CSS.BOARD_SLOT.getName());
+        slotLabel.setGraphic(getBackgroundImage());
+        if (isEvenSlotPosition) {
+            slotLabel.getStyleClass().add(CSS.EVEN_BOARD_SLOT.getName());
+        } else {
+            slotLabel.getStyleClass().add(CSS.ODD_BOARD_SLOT.getName());
+        }
+
     }
 
     public Slot getSlot() {
@@ -53,11 +105,28 @@ public class BoardSlotView extends StackPane {
 
     public void highlightSlot() {
         this.getStyleClass().add(CSS.HIGHLIGHTED_SQUARE.getName());
+        log.info("Slot Label CSS = {}, isEvenSlotPosition = {}", this.slotLabel.getStyleClass(), isEvenSlotPosition);
+
+        slotLabel.getStyleClass().clear();
+        slotLabel.getStyleClass().add(CSS.BOARD_SLOT.getName());
+        if (isEvenSlotPosition) {
+            this.slotLabel.getStyleClass().remove(CSS.EVEN_BOARD_SLOT.getName());
+        } else {
+            this.slotLabel.getStyleClass().remove(CSS.ODD_BOARD_SLOT.getName());
+        }
         isHighlighted = true;
     }
 
     public void unhighlightSlot() {
         this.getStyleClass().remove(CSS.HIGHLIGHTED_SQUARE.getName());
+
+        slotLabel.getStyleClass().clear();
+        slotLabel.getStyleClass().add(CSS.BOARD_SLOT.getName());
+        if (isEvenSlotPosition) {
+            this.slotLabel.getStyleClass().add(CSS.EVEN_BOARD_SLOT.getName());
+        } else {
+            this.slotLabel.getStyleClass().add(CSS.ODD_BOARD_SLOT.getName());
+        }
         isHighlighted = false;
     }
 
@@ -85,8 +154,8 @@ public class BoardSlotView extends StackPane {
         return sb.toString();
     }
 
-    public enum EventHandlerConfig {
-        ENABLED,
-        DISABLED
+    public enum BoardSlotType {
+        GAME_BOARD_SLOT,
+        PLAYER_CARD_SLOT
     }
 }

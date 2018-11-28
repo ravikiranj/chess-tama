@@ -8,12 +8,10 @@ import com.chesstama.model.Card.CardColor;
 import com.chesstama.model.Player.PlayerType;
 import com.chesstama.model.Position;
 import com.chesstama.model.Slot;
-import com.chesstama.view.BoardSlotView.EventHandlerConfig;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.Set;
@@ -49,7 +47,7 @@ public class PlayerCardView extends VBox {
             Label upArrowLabel = new Label(Card.UP_ARROW_STRING);
             upArrowLabel.getStyleClass().add(CSS.ARROW_LABEL.getName());
             upArrowLabel.getStyleClass().add(CSS.CARD_SQUARE.getName());
-            GridPane.setConstraints(upArrowLabel, Board.MASTER_COL, 0);
+            GridPane.setConstraints(upArrowLabel, Board.KING_COL, 0);
             cardGridPane.getChildren().add(upArrowLabel);
         }
 
@@ -60,7 +58,7 @@ public class PlayerCardView extends VBox {
                 Position currentPosition = new Position(modRow, modCol);
 
                 BoardSlotView boardSlotView = new BoardSlotView(new Slot(modRow, modCol), gameView,
-                    EventHandlerConfig.DISABLED);
+                    BoardSlotView.BoardSlotType.PLAYER_CARD_SLOT);
                 boardSlotView.getStyleClass().add(CSS.CARD_SQUARE.getName());
                 boardSlotView.getStyleClass().add(getCssClass(card, currentPosition, validPositions));
                 boardSlotViews[modRow][modCol] = boardSlotView;
@@ -82,12 +80,12 @@ public class PlayerCardView extends VBox {
             Label downArrowLabel = new Label(Card.DOWN_ARROW_STRING);
             downArrowLabel.getStyleClass().add(CSS.ARROW_LABEL.getName());
             downArrowLabel.getStyleClass().add(CSS.CARD_SQUARE.getName());
-            GridPane.setConstraints(downArrowLabel, Board.MASTER_COL, Board.MAX_ROWS + 1);
+            GridPane.setConstraints(downArrowLabel, Board.KING_COL, Board.MAX_ROWS + 1);
             cardGridPane.getChildren().add(downArrowLabel);
         }
 
         cardLabel = new Label(getCardLabelStr());
-        GridPane.setConstraints(cardLabel, Board.MASTER_COL - 1, Board.MAX_ROWS);
+        GridPane.setConstraints(cardLabel, Board.KING_COL - 1, Board.MAX_ROWS);
         this.getChildren().add(cardLabel);
 
         this.getStyleClass().add(CSS.PLAYER_CARD_HOLDER.getName());
@@ -161,10 +159,10 @@ public class PlayerCardView extends VBox {
 
     private String getCssClass(final Card card, final Position currentPosition, final Set<Position> validPositions) {
         if (card == null) {
-            return StringUtils.EMPTY;
+            return CSS.EMPTY_SQUARE.getName();
         }
 
-        if (currentPosition.equals(Board.MASTER_POSITION)) {
+        if (currentPosition.equals(Board.KING_POSITION)) {
             return CSS.GREY_SQUARE.getName();
         }
 
@@ -172,7 +170,7 @@ public class PlayerCardView extends VBox {
             return card.getCardColor() == CardColor.BLUE ? CSS.BLUE_SQUARE.getName() : CSS.RED_SQUARE.getName();
         }
 
-        return StringUtils.EMPTY;
+        return CSS.EMPTY_SQUARE.getName();
     }
 
     public Card getCard() {

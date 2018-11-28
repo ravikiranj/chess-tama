@@ -135,14 +135,14 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
 
         BoardSlotView boardSlotView = boardView.getBoardSlotView(proposedMovePosition);
         Optional<Piece> proposedMoveSlotPieceOptional = boardSlotView.getSlot().getPiece();
-        Position opponentMasterHome = currentPlayerTurn == PlayerType.P1 ?
-            new Position(Board.MIN_ROWS, Board.MASTER_COL) : new Position(Board.MAX_ROWS, Board.MASTER_COL);
+        Position opponentKingHome = currentPlayerTurn == PlayerType.P1 ?
+            new Position(Board.MIN_ROWS, Board.KING_COL) : new Position(Board.MAX_ROWS, Board.KING_COL);
 
         if (!proposedMoveSlotPieceOptional.isPresent()) {
-            if (currentPlayerPiece.isMaster() && proposedMovePosition.equals(opponentMasterHome)) {
+            if (currentPlayerPiece.isKing() && proposedMovePosition.equals(opponentKingHome)) {
                 return currentPlayerTurn == PlayerType.P1 ?
-                    GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE :
-                    GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE;
+                    GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_KING_SQUARE_CAPTURE :
+                    GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_KING_SQUARE_CAPTURE;
             }
             return currentPlayerTurn == PlayerType.P1 ? GameMoveStatus.PLAYER1_MOVED : GameMoveStatus.PLAYER2_MOVED;
         }
@@ -157,15 +157,15 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
         pieceWinner.getCapturedPieces().add(proposedMoveSlotPiece);
         pieceLoser.getRemovedPieces().add(proposedMoveSlotPiece);
 
-        if (proposedMoveSlotPiece.isMaster()) {
+        if (proposedMoveSlotPiece.isKing()) {
             return currentPlayerTurn == PlayerType.P1 ?
-                GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_MASTER_PIECE_CAPTURE :
-                GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_MASTER_PIECE_CAPTURE;
+                GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_KING_PIECE_CAPTURE :
+                GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_KING_PIECE_CAPTURE;
         } else {
-            if (currentPlayerPiece.isMaster() && proposedMovePosition.equals(opponentMasterHome)) {
+            if (currentPlayerPiece.isKing() && proposedMovePosition.equals(opponentKingHome)) {
                 return currentPlayerTurn == PlayerType.P1 ?
-                    GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE :
-                    GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_MASTER_SQUARE_CAPTURE;
+                    GameMoveStatus.PLAYER1_WINS_BY_OPPONENT_KING_SQUARE_CAPTURE :
+                    GameMoveStatus.PLAYER2_WINS_BY_OPPONENT_KING_SQUARE_CAPTURE;
             }
             return currentPlayerTurn == PlayerType.P1 ? GameMoveStatus.PLAYER1_CAPTURED :
                 GameMoveStatus.PLAYER2_CAPTURED;
