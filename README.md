@@ -7,3 +7,7 @@
 
 ## Run Game
 * Run game via `./gradlew app`
+
+## Screenshot
+![Chess-Tama screenshot](src/main/resources/images/chess-tama-screenshot.png)
+
