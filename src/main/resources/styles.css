@@ -40,9 +40,11 @@
 }
 
 .highlighted-piece-square {
+    -fx-border-color: #F4D03F;
+    -fx-border-width: 4px;
 }
 
-.highlighted-card {
+.player-card-holder.highlighted-card {
     -fx-border-color: #F39C12;
     -fx-border-style: solid;
     -fx-border-width: 5px;
@@ -78,6 +80,9 @@
 
 .player-card-holder {
     -fx-alignment: center;
+    -fx-border-color: #F4F4F4;
+    -fx-border-style: solid;
+    -fx-border-width: 5px;
 }
 
 .current-player-turn {
@@ -102,9 +107,9 @@
 }
 
 .even-board-slot {
-    -fx-background-color: #D18B47;
+    -fx-background-color: #FBFCFC;
 }
 
 .odd-board-slot {
-    -fx-background-color: #FFCE9E;
+    -fx-background-color: #B1B6BA;
 }
