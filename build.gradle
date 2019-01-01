@@ -8,6 +8,10 @@ plugins {
 
 repositories {
     mavenCentral()
+
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
@@ -24,6 +28,9 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '23.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
 
+    // backend
+    compile name: 'chess-tama-engine-java'
+
     // testing
     compile group: 'org.testng', name: 'testng', version: '6.11'
 }
@@ -38,7 +45,7 @@ sourceSets.main {
     }
 }
 
-task wrapper(type: Wrapper) {
+wrapper {
     gradleVersion = '4.1'
 }
 

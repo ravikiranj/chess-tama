@@ -11,7 +11,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.zip
@@ -31,3 +30,4 @@ out/
 # Gradle
 build/
 .gradle/
+gradle/wrapper/
