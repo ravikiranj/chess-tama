@@ -73,8 +73,6 @@ public class BoardSlotView extends StackPane {
             imagePath = piece.isKing() ? IMAGES_P2_KING_PNG: IMAGES_P2_PAWN_PNG;
         }
 
-        log.info("Image path = {}", imagePath);
-
         return new ImageView(new Image(imagePath));
     }
 

@@ -140,6 +140,8 @@ public class GameUtil {
         // Set current player
         board.setCurrentPlayer(Player.P2);
 
+        log.info("Board = {}", board);
+
         return board;
     }
 }

@@ -140,6 +140,7 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
             ScoreMoves bestScoreMoves = MiniMaxWithAlphaBeta.getBestMove(GameUtil.getBoard(gameView), alpha, beta,
                 maxDepth, true, movePath);
 
+            log.info("Leaf nodes evaluated = {}", MiniMaxWithAlphaBeta.LEAF_NODES_EVALUATED);
             log.info("BestScoreMoves = {}", bestScoreMoves);
             if (bestScoreMoves.getMoves().isEmpty()) {
                 throw new RuntimeException("BestMoves is empty");
