@@ -37,6 +37,7 @@ public class GameView extends Application {
     public static final String CHESS_TAMA = "Chess-Tama";
     public static final String PLAYER_2_STR = "Player 2";
     public static final String CURRENT_PLAYER_STR = "Current Player: ";
+    private static final String THINKING = " (Thinking...)";
 
     private final Game game;
 
@@ -127,7 +128,8 @@ public class GameView extends Application {
 
     private String getCurrentPlayerTurnString() {
         StringBuilder stringBuilder = new StringBuilder(CURRENT_PLAYER_STR);
-        stringBuilder.append(game.getBoard().getCurrentPlayerTurn() == PlayerType.P1 ? PLAYER_1_STR : PLAYER_2_STR);
+        stringBuilder.append(game.getBoard().getCurrentPlayerTurn() == PlayerType.P1 ? PLAYER_1_STR : PLAYER_2_STR +
+            THINKING);
 
         return stringBuilder.toString();
     }

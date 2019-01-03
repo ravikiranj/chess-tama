@@ -16,11 +16,14 @@ import com.chesstama.view.BoardSlotView;
 import com.chesstama.view.BoardView;
 import com.chesstama.view.GameView;
 import com.chesstama.view.PlayerCardView;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -120,22 +123,24 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
         updateCards(nextPlayerTurn, currentSelectedCard);
 
         if (nextPlayerTurn == PlayerType.P2) {
-            new BestMoveTask(gameView).run();
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> new BestMoveTask(gameView).run()));
+            timeline.play();
         }
     }
 
-    private static class BestMoveTask {
+    private static class BestMoveTask implements Runnable {
         private final GameView gameView;
 
         public BestMoveTask(final GameView gameView) {
             this.gameView = gameView;
         }
 
+        @Override
         public void run() {
             List<Move> movePath = new ArrayList<>();
             ScoreMoves alpha = new ScoreMoves(Score.MIN_SCORE, new ArrayList<>());
             ScoreMoves beta = new ScoreMoves(Score.MAX_SCORE, new ArrayList<>());
-            int maxDepth = 5;
+            int maxDepth = 3;
 
             ScoreMoves bestScoreMoves = MiniMaxWithAlphaBeta.getBestMove(GameUtil.getBoard(gameView), alpha, beta,
                 maxDepth, true, movePath);
@@ -157,21 +162,14 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
             BoardSlotView toBoardSlotView = gameView.getBoardView().getBoardSlotView(to);
             PlayerCardView playerCardView = gameView.getPlayerCardView(move.getCard());
 
-            try {
-                log.info("Clicking playerCardView = {}", playerCardView);
-                playerCardView.fireEvent(getMouseClickEvent());
-                Thread.sleep(1000);
+            log.info("Clicking playerCardView = {}", playerCardView);
+            playerCardView.fireEvent(getMouseClickEvent());
 
-                log.info("Clicking fromBoardSlotView = {}", fromBoardSlotView);
-                fromBoardSlotView.fireEvent(getMouseClickEvent());
-                Thread.sleep(1000);
+            log.info("Clicking fromBoardSlotView = {}", fromBoardSlotView);
+            fromBoardSlotView.fireEvent(getMouseClickEvent());
 
-                log.info("Clicking toBoardSlotView = {}", toBoardSlotView);
-                toBoardSlotView.fireEvent(getMouseClickEvent());
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                log.error("Encountered exception!!!", e);
-            }
+            log.info("Clicking toBoardSlotView = {}", toBoardSlotView);
+            toBoardSlotView.fireEvent(getMouseClickEvent());
         }
 
         private MouseEvent getMouseClickEvent() {
@@ -197,7 +195,7 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
         gameEndAlert.setTitle(GameView.CHESS_TAMA);
         gameEndAlert.setHeaderText(null);
         gameEndAlert.setContentText(gameMoveStatus.getStatusString());
-        gameEndAlert.showAndWait();
+        gameEndAlert.show();
     }
 
     private GameMoveStatus runCaptureLogic(final Piece currentPlayerPiece,
