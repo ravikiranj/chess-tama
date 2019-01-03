@@ -1,5 +1,7 @@
 package com.chesstama.model;
 
+import com.chesstama.model.Player.PlayerType;
+
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -43,6 +45,12 @@ public class Piece {
 
     public String getShortName() {
         return player.getPlayerType().name() + " - " + pieceType.getShortName();
+    }
+
+    public String getBackendName() {
+        String pieceName = isKing() ? "K" : "P";
+        String playerName = player.getPlayerType() == PlayerType.P1 ? "1" : "2";
+        return pieceName + playerName;
     }
 
     @Override

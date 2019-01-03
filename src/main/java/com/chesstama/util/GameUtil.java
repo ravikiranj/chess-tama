@@ -1,5 +1,7 @@
 package com.chesstama.util;
 
+import com.chesstama.backend.engine.Board;
+import com.chesstama.backend.engine.Player;
 import com.chesstama.model.Card;
 import com.chesstama.model.Piece;
 import com.chesstama.model.Player.PlayerType;
@@ -119,5 +121,25 @@ public class GameUtil {
         Optional<Piece> pieceOptional = boardSlotForNewPos.getSlot().getPiece();
         return pieceOptional.isPresent() &&
             pieceOptional.get().getPlayer().getPlayerType() == currentPlayerTurn;
+    }
+
+    public static Board getBoard(final GameView gameView) {
+        // Sets P1/P2 King and Pawn Positions
+        Board board = gameView.getBoardView().getBoard();
+
+        // Set P1 Cards
+        board.getP1Cards().clear();
+        board.getP1Cards().addAll(gameView.getPlayerCards(PlayerType.P1));
+        board.setP1UpcomingCard(gameView.getPlayerUpcomingCard(PlayerType.P1));
+
+        // Set P2 Cards
+        board.getP2Cards().clear();
+        board.getP2Cards().addAll(gameView.getPlayerCards(PlayerType.P2));
+        board.setP2UpcomingCard(gameView.getPlayerUpcomingCard(PlayerType.P2));
+
+        // Set current player
+        board.setCurrentPlayer(Player.P2);
+
+        return board;
     }
 }

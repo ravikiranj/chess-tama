@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * GameView
@@ -193,6 +194,34 @@ public class GameView extends Application {
         for (PlayerCardView playerCardView : allCards) {
             playerCardView.unselectCard();
         }
+    }
+
+    public List<com.chesstama.backend.engine.Card> getPlayerCards(final PlayerType playerType) {
+        List<Card> playerCards = playerType == PlayerType.P1 ? game.getP1().getCards() : game.getP2().getCards();
+
+        return playerCards.stream()
+                          .map(card -> com.chesstama.backend.engine.Card.valueOf(card.name()))
+                          .collect(Collectors.toList());
+    }
+
+    public com.chesstama.backend.engine.Card getPlayerUpcomingCard(final PlayerType playerType) {
+        Card upcomingPlayerCard = playerType == PlayerType.P1 ? game.getP1().getUpcomingCard() : game.getP2().getUpcomingCard();
+
+        return Optional.ofNullable(upcomingPlayerCard)
+                       .map(card -> com.chesstama.backend.engine.Card.valueOf(card.name()))
+                       .orElse(com.chesstama.backend.engine.Card.EMPTY);
+    }
+
+    public PlayerCardView getPlayerCardView(final com.chesstama.backend.engine.Card backendCard) {
+        Card card = Card.valueOf(backendCard.name());
+        for (PlayerCardView playerCardView : allCards) {
+            if (playerCardView.getCard() == card) {
+                return playerCardView;
+            }
+        }
+
+        throw new IllegalArgumentException("Unable to find backendCard = " + backendCard);
+
     }
 
     public void updatePlayerCardViews() {
