@@ -1,4 +1,4 @@
-package com.chesstama.view;
+package com.chesstama.handlers;
 
 import com.chesstama.backend.eval.MiniMaxWithAlphaBeta;
 import com.chesstama.backend.eval.Move;
@@ -6,6 +6,9 @@ import com.chesstama.backend.eval.Score;
 import com.chesstama.backend.eval.ScoreMoves;
 import com.chesstama.model.Position;
 import com.chesstama.util.GameUtil;
+import com.chesstama.view.BoardSlotView;
+import com.chesstama.view.GameView;
+import com.chesstama.view.PlayerCardView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class BestMoveView implements Runnable {
+public class BestMoveHandler implements Runnable {
     private static final int MAX_DEPTH = 1;
     private final GameView gameView;
 
-    public BestMoveView(final GameView gameView) {
+    public BestMoveHandler(final GameView gameView) {
         this.gameView = gameView;
     }
 

@@ -8,7 +8,6 @@ import com.chesstama.model.Player;
 import com.chesstama.model.Player.PlayerType;
 import com.chesstama.model.Position;
 import com.chesstama.util.GameUtil;
-import com.chesstama.view.BestMoveView;
 import com.chesstama.view.BoardSlotView;
 import com.chesstama.view.BoardView;
 import com.chesstama.view.GameView;
@@ -117,7 +116,7 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
         updateCards(nextPlayerTurn, currentSelectedCard);
 
         if (nextPlayerTurn == PlayerType.P2) {
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> new BestMoveView(gameView).run()));
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> new BestMoveHandler(gameView).run()));
             timeline.play();
         }
     }
