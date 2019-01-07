@@ -1,9 +1,5 @@
 package com.chesstama.handlers;
 
-import com.chesstama.backend.eval.MiniMaxWithAlphaBeta;
-import com.chesstama.backend.eval.Move;
-import com.chesstama.backend.eval.Score;
-import com.chesstama.backend.eval.ScoreMoves;
 import com.chesstama.model.Board;
 import com.chesstama.model.Card;
 import com.chesstama.model.GameMoveStatus;
@@ -12,21 +8,19 @@ import com.chesstama.model.Player;
 import com.chesstama.model.Player.PlayerType;
 import com.chesstama.model.Position;
 import com.chesstama.util.GameUtil;
+import com.chesstama.view.BestMoveView;
 import com.chesstama.view.BoardSlotView;
 import com.chesstama.view.BoardView;
 import com.chesstama.view.GameView;
-import com.chesstama.view.PlayerCardView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,65 +117,10 @@ public class BoardSlotViewClickHandler implements EventHandler<MouseEvent> {
         updateCards(nextPlayerTurn, currentSelectedCard);
 
         if (nextPlayerTurn == PlayerType.P2) {
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> new BestMoveTask(gameView).run()));
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), ae -> new BestMoveView(gameView).run()));
             timeline.play();
         }
     }
-
-    private static class BestMoveTask implements Runnable {
-        private final GameView gameView;
-
-        public BestMoveTask(final GameView gameView) {
-            this.gameView = gameView;
-        }
-
-        @Override
-        public void run() {
-            List<Move> movePath = new ArrayList<>();
-            ScoreMoves alpha = new ScoreMoves(Score.MIN_SCORE, new ArrayList<>());
-            ScoreMoves beta = new ScoreMoves(Score.MAX_SCORE, new ArrayList<>());
-            int maxDepth = 3;
-
-            ScoreMoves bestScoreMoves = MiniMaxWithAlphaBeta.getBestMove(GameUtil.getBoard(gameView), alpha, beta,
-                maxDepth, true, movePath);
-
-            log.info("Leaf nodes evaluated = {}", MiniMaxWithAlphaBeta.LEAF_NODES_EVALUATED);
-            log.info("BestScoreMoves = {}", bestScoreMoves);
-            if (bestScoreMoves.getMoves().isEmpty()) {
-                throw new RuntimeException("BestMoves is empty");
-            }
-
-            Move move = bestScoreMoves.getMoves().get(0);
-
-            Position from = transform(move.getFrom());
-            Position to = transform(move.getTo());
-
-            log.info("Best Move for P2 = {}", bestScoreMoves.getMoves().get(0));
-
-            BoardSlotView fromBoardSlotView = gameView.getBoardView().getBoardSlotView(from);
-            BoardSlotView toBoardSlotView = gameView.getBoardView().getBoardSlotView(to);
-            PlayerCardView playerCardView = gameView.getPlayerCardView(move.getCard());
-
-            log.info("Clicking playerCardView = {}", playerCardView);
-            playerCardView.fireEvent(getMouseClickEvent());
-
-            log.info("Clicking fromBoardSlotView = {}", fromBoardSlotView);
-            fromBoardSlotView.fireEvent(getMouseClickEvent());
-
-            log.info("Clicking toBoardSlotView = {}", toBoardSlotView);
-            toBoardSlotView.fireEvent(getMouseClickEvent());
-        }
-
-        private MouseEvent getMouseClickEvent() {
-            return new MouseEvent(MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true, null);
-        }
-
-        private static Position transform(final com.chesstama.backend.engine.Position position) {
-            return new Position(position.getRow() + 1, position.getCol() + 1);
-        }
-    }
-
 
     private void triggerGameEnd(final GameMoveStatus gameMoveStatus) {
         gameView.disableAllHandlers();
